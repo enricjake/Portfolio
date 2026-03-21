@@ -1,6 +1,6 @@
 # Portfolio Website
 
-This is my personal portfolio built with [JavaScript][CSS].
+This is my personal portfolio built with [JavaScript] [CSS] .
 
 [![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-222222?style=for-the-badge&logo=github&logoColor=white)](https://enricjake.github.io/Portfolio)
 
