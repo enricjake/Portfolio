@@ -479,7 +479,14 @@
         mainNav.classList.remove('active');
       }
     }
-
+    mainNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 600) {
+          mainNav.classList.remove('active');
+          mainNav.style.display = 'none';
+        }
+      });
+    });
     // Initial check
     updateMobileMenuVisibility();
     
