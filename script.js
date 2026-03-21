@@ -272,6 +272,31 @@ function setupScrollAnimations() {
 }
 
 // ===== EVENT LISTENERS =====
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+    renderProjects();
+    updateMobileMenuVisibility();
+    setupScrollAnimations();
+    updateFooterYear();
+    
+    if (contactBtn) {
+        contactBtn.addEventListener('click', function(event) {
+            if (event.target === this || this.contains(event.target)) {
+                // Your code here
+                console.log('Contact button clicked');
+                // Add code to scroll to contact form
+                const contactFormSection = document.getElementById("contact");
+                if (contactFormSection) {
+                    contactFormSection.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
+                }
+            }
+        });
+    }
+});
 navLinks.forEach(link => {
     link.addEventListener('click', scrollToSection);
 });
