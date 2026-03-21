@@ -469,7 +469,7 @@ section.visible {
 }
 
 /* ===== CONTACT FORM ===== */
-#contactForm {
+.contact-form {
     align-items: center;
     justify-content: center;
     display: flex;
@@ -480,8 +480,19 @@ section.visible {
     margin: 24px auto 0;
 }
 
-#contactForm input,
-#contactForm textarea {
+.contact-form label {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 100%;
+    color: var(--text-color);
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+}
+
+.contact-form input,
+.contact-form textarea {
     width: 100%;
     padding: 14px 18px;
     background: var(--card-bg);
@@ -491,20 +502,21 @@ section.visible {
     font-family: 'Manrope', sans-serif;
     font-size: 1rem;
     transition: border-color 0.2s;
+    margin-top: 4px;
 }
 
-#contactForm input:focus,
-#contactForm textarea:focus {
+.contact-form input:focus,
+.contact-form textarea:focus {
     outline: none;
     border-color: var(--accent-color);
 }
 
-#contactForm textarea {
+.contact-form textarea {
     min-height: 120px;
     resize: vertical;
 }
 
-#contactForm button {
+.contact-form button {
     margin-top: 8px;
 }
 
@@ -680,7 +692,7 @@ button:hover {
         text-align: center;
     }
     
-    #contactForm {
+    .contact-form {
         margin: 24px auto 0;
     }
 }

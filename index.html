@@ -69,11 +69,17 @@
     <p><a href="mailto:esguerraenric13@gmail.com">esguerraenric13@gmail.com</a></p>
     <p><a href="https://www.google.com/maps/place/Edmonton,+AB" target="_blank">Edmonton, Canada</a></p>
     
-    <form id="contactForm" action="https://formspree.io/f/xaqpzyql" method="POST">
-      <input name="name" type="text" placeholder="Name" required/>
-      <input name="email" type="email" placeholder="Email" required/>
-      <textarea name="message" placeholder="Tell me about your idea…" required></textarea>
-      <button type="submit">Send Message</button>
+    <form class="contact-form" action="https://formspree.io/f/xaqpzyql" method="POST" enctype="multipart/form-data">
+      <label>
+        <input type="text" name="name" required placeholder="Name">
+      </label>
+      <label>
+        <input type="email" name="email" required placeholder="Email">
+      </label>
+      <label>
+        <textarea name="message" required placeholder="Tell me about your idea..."></textarea>
+      </label>
+      <button type="submit">Send</button>
     </form>
   </section>
 
