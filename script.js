@@ -6,7 +6,7 @@ const projects = [
         link: "https://enricjake.github.io/BongoliciousCat/",
         technologies: ["JavaScript", "Canvas", "CSS"],
         category: "web",
-        img: "https://imgs.search.brave.com/fA5Wmjj1krYYDlY0HKKImEAG_AJd74mmS1zvfNOkc2Y/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4z/LmVtb2ppLmdnL2Vt/b2ppcy81MTgwX2Jv/bmdvY2F0LmdpZg.gif"
+        img: "https://wallpapers-clan.com/wp-content/uploads/2024/03/bongo-cat-meme-gif-desktop-wallpaper-preview.gif"
     },
     {
         title: "Simple Trivia",
@@ -14,7 +14,7 @@ const projects = [
         link: "https://enricjake.github.io/SimpleTriviaGame/",
         technologies: ["JavaScript", "DOM", "Web Storage"],
         category: "web",
-        img: "https://imgs.search.brave.com/9xgkY0cCfX7GcoRBmerT5VjD93FvlO-qhp0l9sQiROs/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMjIw/NjgzNDM2Ni92ZWN0/b3IvYS12aWJyYW50/LWNvbWljLXN0eWxl/LXRyaXZpYS1jaGFs/bGVuZ2UtYmFubmVy/LXdpdGgtYm9sZC10/eXBvZ3JhcGh5LWEt/eWVsbG93LWJ1cnN0/LWJhY2tncm91bmQu/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PTdzaVdua0VaaWZR/amlwYmlKVVdJeVRQ/THFwTk9rZzI1OVNr/VHNySzRCYVU9"
+        img: "https://media.istockphoto.com/id/1469754711/vector/trivia-time-neon-sign-geometric-frame-decoration-quiz-show-label-on-brick-wall-vector-stock.jpg?s=612x612&w=0&k=20&c=7D-_PFacHKOD6pGYMaLa0FkR9PdKjXqmb1zZ4tIhEDQ="
     },
     {
         title: "WinSet – Windows Toolkit",
@@ -30,7 +30,7 @@ const projects = [
         link: "https://enricjake.github.io/SimpleWeatherApp/",
         technologies: ["Electron", "JS", "HTML"],
         category: "desktop",
-        img: "https://cdn.pixabay.com/photo/2017/12/06/05/23/cloud-3001010_1280.png"
+        img: "https://blog.afi.io/content/images/size/w2000/2025/04/gg-weather-icon-1--1-.png"
     }
 ];
 
@@ -75,8 +75,7 @@ function renderProjects() {
 
         const techBadges = project.technologies
             .map(tech => {
-                const color = techColors[tech] || '#00ffcc';
-                return `<span style="background: ${color}; color: ${getContrastColor(color)}">${tech}</span>`;
+                return `<span style="background: #00ffcc; color: #0a0a0a">${tech}</span>`;
             })
             .join("");
 
