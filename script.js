@@ -62,6 +62,8 @@ const contactForm = document.getElementById("contactForm");
 const mobileMenuToggle = document.getElementById("mobileMenuToggle");
 const mainNav = document.getElementById("mainNav");
 const backToTopButton = document.getElementById("backTop");
+const thankYouModal = document.getElementById("thankYouModal");
+const closeModalBtn = document.getElementById("closeModal");
 
 // ===== RENDER PROJECTS =====
 function renderProjects() {
@@ -169,8 +171,33 @@ function scrollToTop() {
 // ===== CONTACT FORM =====
 function handleContactFormSubmit(e) {
     e.preventDefault();
-    alert('Thanks! I\'ll reply within 24 h.');
-    contactForm.reset();
+    
+    const formData = new FormData(contactForm);
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const message = formData.get('message');
+    
+    // Construct mailto link
+    const subject = encodeURIComponent(`Portfolio Contact: ${name}`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+    const mailtoLink = `mailto:esguerraenric13@gmail.com?subject=${subject}&body=${body}`;
+    
+    // Open email client
+    window.location.href = mailtoLink;
+    
+    // Show thank you modal after a short delay
+    setTimeout(() => {
+        showThankYouModal();
+        contactForm.reset();
+    }, 500);
+}
+
+function showThankYouModal() {
+    thankYouModal.classList.add('active');
+}
+
+function hideThankYouModal() {
+    thankYouModal.classList.remove('active');
 }
 
 // ===== SCROLL ANIMATIONS =====
@@ -237,6 +264,26 @@ if (backToTopButton) {
 if (contactForm) {
     contactForm.addEventListener('submit', handleContactFormSubmit);
 }
+
+if (closeModalBtn) {
+    closeModalBtn.addEventListener('click', hideThankYouModal);
+}
+
+// Close modal when clicking overlay
+if (thankYouModal) {
+    thankYouModal.addEventListener('click', (e) => {
+        if (e.target === thankYouModal) {
+            hideThankYouModal();
+        }
+    });
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && thankYouModal.classList.contains('active')) {
+        hideThankYouModal();
+    }
+});
 
 // ===== FOOTER YEAR =====
 function updateFooterYear() {
