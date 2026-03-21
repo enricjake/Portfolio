@@ -479,13 +479,22 @@
         mainNav.classList.remove('active');
       }
     }
+        // Close mobile menu when a nav link is clicked
     mainNav.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
+      link.addEventListener('click' , () => { 
         if (window.innerWidth <= 600) {
           mainNav.classList.remove('active');
           mainNav.style.display = 'none';
         }
       });
+    });
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 600 && mainNav.classList.contains('active')) {
+        if (!e.target.closest('nav') || mainNav.classList.contains('active')) {
+          mainNav.classList.remove('active');
+          mainNav.style.display = 'none';
+        }
+      }
     });
     // Initial check
     updateMobileMenuVisibility();
@@ -566,4 +575,6 @@
   </script>
 </body>
 </html>
+
+
 
