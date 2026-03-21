@@ -158,9 +158,9 @@ document.addEventListener('click', (e) => {
 // ===== BACK TO TOP =====
 function handleScrollToTop() {
     if (window.pageYOffset > 400) {
-        backToTopButton.style.display = 'block';
+        backToTopButton.classList.add('visible');
     } else {
-        backToTopButton.style.display = 'none';
+        backToTopButton.classList.remove('visible');
     }
 }
 
@@ -220,13 +220,21 @@ function setupScrollAnimations() {
     const observerOptions = {
         root: null,
         rootMargin: '0px',
-        threshold: 0.1
+        threshold: [0.1, 0.3, 0.7]
     };
     
     const observerCallback = (entries) => {
         entries.forEach(entry => {
+            const element = entry.target;
+            
             if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+                // Fade in based on how much of the element is visible
+                if (entry.intersectionRatio >= 0.1) {
+                    element.classList.add('visible');
+                }
+            } else {
+                // Fade out when element is no longer visible
+                element.classList.remove('visible');
             }
         });
     };

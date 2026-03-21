@@ -3,7 +3,7 @@
 
 /* ===== CSS VARIABLES ===== */
 :root {
-    --bg-color: #0a0a0a;
+    --bg-color: #000000;
     --text-color: #ffffff;
     --text-muted: #888888;
     --accent-color: #00ffcc;
@@ -31,6 +31,7 @@ body {
     color: var(--text-color);
     position: relative;
     overflow-x: hidden;
+    padding-top: 70px;
 }
 
 h1, h2, h3 {
@@ -54,65 +55,105 @@ a {
     pointer-events: none;
     z-index: -1;
     overflow: hidden;
+    background: #0a0a0a;
 }
 
-.gradient-orb {
+.gradient-layer {
     position: absolute;
-    border-radius: 50%;
-    filter: blur(40px);
-    opacity: 0.5;
-    animation: float 20s infinite ease-in-out;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+    mix-blend-mode: screen;
 }
 
-.orb1 {
-    width: 300px;
-    height: 300px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    top: -150px;
-    left: -150px;
-    animation-delay: 0s;
+.layer1 {
+    background: linear-gradient(
+        45deg,
+        rgba(0, 255, 204, 0.3) 0%,
+        rgba(102, 126, 234, 0.2) 25%,
+        rgba(240, 147, 251, 0.3) 50%,
+        rgba(79, 172, 254, 0.2) 75%,
+        rgba(0, 255, 204, 0.3) 100%
+    );
+    background-size: 400% 400%;
+    animation: gradientFlow1 25s ease infinite;
 }
 
-.orb2 {
-    width: 400px;
-    height: 400px;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    bottom: -200px;
-    right: -200px;
-    animation-delay: 5s;
+.layer2 {
+    background: linear-gradient(
+        -45deg,
+        rgba(118, 75, 162, 0.25) 0%,
+        rgba(0, 230, 184, 0.15) 33%,
+        rgba(245, 87, 108, 0.25) 66%,
+        rgba(56, 249, 215, 0.15) 100%
+    );
+    background-size: 300% 300%;
+    animation: gradientFlow2 30s ease infinite;
 }
 
-.orb3 {
-    width: 250px;
-    height: 250px;
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation-delay: 10s;
+.layer3 {
+    background: linear-gradient(
+        90deg,
+        rgba(67, 233, 123, 0.2) 0%,
+        rgba(0, 242, 254, 0.15) 50%,
+        rgba(67, 233, 123, 0.2) 100%
+    );
+    background-size: 200% 200%;
+    animation: gradientFlow3 20s ease infinite;
 }
 
-.orb4 {
-    width: 350px;
-    height: 350px;
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    top: 20%;
-    right: -175px;
-    animation-delay: 15s;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translate(0, 0) scale(1);
+@keyframes gradientFlow1 {
+    0% {
+        background-position: 0% 50%;
+        transform: translateX(0) translateY(0) scale(1);
     }
     25% {
-        transform: translate(100px, -100px) scale(1.1);
+        background-position: 50% 25%;
+        transform: translateX(-3%) translateY(2%) scale(1.1);
     }
     50% {
-        transform: translate(-100px, 100px) scale(0.9);
+        background-position: 100% 50%;
+        transform: translateX(3%) translateY(-2%) scale(0.9);
     }
     75% {
-        transform: translate(50px, 50px) scale(1.05);
+        background-position: 50% 75%;
+        transform: translateX(-2%) translateY(-1%) scale(1.05);
+    }
+    100% {
+        background-position: 0% 50%;
+        transform: translateX(0) translateY(0) scale(1);
+    }
+}
+
+@keyframes gradientFlow2 {
+    0% {
+        background-position: 0% 0%;
+        transform: rotate(0deg) scale(1);
+    }
+    33% {
+        background-position: 100% 50%;
+        transform: rotate(120deg) scale(1.15);
+    }
+    66% {
+        background-position: 0% 100%;
+        transform: rotate(240deg) scale(0.85);
+    }
+    100% {
+        background-position: 0% 0%;
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+@keyframes gradientFlow3 {
+    0%, 100% {
+        background-position: 0% 50%;
+        opacity: 0.4;
+    }
+    50% {
+        background-position: 100% 50%;
+        opacity: 0.6;
     }
 }
 
@@ -122,15 +163,13 @@ header, nav {
     top: 0;
     left: 0;
     right: 0;
-    background: var(--bg-color);
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+    background: transparent;
+    box-shadow: none;
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 18px 6vw;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
 }
 
 nav {
@@ -225,17 +264,20 @@ nav a:hover {
 }
 
 /* ===== SECTIONS ===== */
-section {
+section:not(.hero) {
     padding: 100px 6vw;
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    min-height: calc(100vh - 100px);
+    transform: translateY(30px) scale(0.95);
+    filter: blur(2px);
+    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
+    min-height: 100vh;
+    margin-top: 50px;
 }
 
 section.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    filter: blur(0);
 }
 
 /* ===== HERO SECTION ===== */
@@ -527,13 +569,15 @@ footer {
     font-size: 0.85rem;
     color: var(--text-muted);
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transform: translateY(30px) scale(0.95);
+    filter: blur(2px);
+    transition: opacity 0.6s ease, transform 0.6s ease, filter 0.6s ease;
 }
 
 footer.visible {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+    filter: blur(0);
 }
 
 footer p {
@@ -596,23 +640,40 @@ footer p {
     position: fixed;
     bottom: 24px;
     right: 24px;
-    background: var(--accent-color);
+    background: linear-gradient(135deg, var(--accent-color), #00e6b8);
     color: var(--bg-color);
     border: none;
     border-radius: 50%;
-    width: 44px;
-    height: 44px;
+    width: 50px;
+    height: 50px;
     font-size: 1.2rem;
     cursor: pointer;
     display: none;
     z-index: 100;
-    transition: transform 0.2s, background 0.2s;
-    box-shadow: 0 2px 10px rgba(0, 255, 204, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 20px rgba(0, 255, 204, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+}
+
+#backTop.visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
 #backTop:hover {
-    transform: scale(1.1);
-    background: #00e6b8;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(0, 255, 204, 0.6);
+    background: linear-gradient(135deg, #00e6b8, var(--accent-color));
+}
+
+#backTop:active {
+    transform: translateY(-1px) scale(0.98);
 }
 
 /* ===== BUTTONS ===== */
