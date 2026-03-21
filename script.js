@@ -173,23 +173,38 @@ function handleContactFormSubmit(e) {
     e.preventDefault();
     
     const formData = new FormData(contactForm);
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const message = formData.get('message');
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
     
-    // Construct mailto link
-    const subject = encodeURIComponent(`Portfolio Contact: ${name}`);
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
-    const mailtoLink = `mailto:esguerraenric13@gmail.com?subject=${subject}&body=${body}`;
+    // Show loading state
+    submitButton.textContent = 'Sending...';
+    submitButton.disabled = true;
     
-    // Open email client
-    window.location.href = mailtoLink;
-    
-    // Show thank you modal after a short delay
-    setTimeout(() => {
-        showThankYouModal();
-        contactForm.reset();
-    }, 500);
+    // Submit to Formspree
+    fetch(contactForm.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            showThankYouModal();
+            contactForm.reset();
+        } else {
+            throw new Error('Form submission failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Sorry, there was an error sending your message. Please try again.');
+    })
+    .finally(() => {
+        // Reset button state
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+    });
 }
 
 function showThankYouModal() {
