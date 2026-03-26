@@ -34,28 +34,8 @@ const projects = [
     }
 ];
 
-// ===== TECH COLORS =====
-const techColors = {
-    'JavaScript': '#f7df1e',
-    'Canvas': '#ff6b35',
-    'CSS': '#1572b6',
-    'DOM': '#ff6b35',
-    'Web Storage': '#ff6b35',
-    'Python': '#3776ab',
-    'Tkinter': '#cc2927',
-    'pywin32': '#cc2927',
-    'Electron': '#47848f',
-    'JS': '#f7df1e',
-    'HTML': '#e34f26',
-    'HTML5': '#e34f26',
-    'Tkinter': '#cc2927',
-    'pywin32': '#cc2927',
-    'Windows API': '#00a4ef'
-};
-
 // ===== SELECT ELEMENTS =====
 const projectList = document.getElementById("projectList");
-const contactBtn = document.getElementById("contactBtn");
 const navLinks = document.querySelectorAll("nav a");
 const sections = document.querySelectorAll("section");
 const contactForm = document.getElementById("contactForm");
@@ -82,7 +62,7 @@ function renderProjects() {
             .join("");
 
         card.innerHTML = `
-            <img src="${project.img}" alt="${project.title}" class="project-image">
+            <img src="${project.img}" alt="${project.title}" class="project-image" loading="lazy">
             <div class="project-content">
                 <h3>${project.title}</h3>
                 <p>${project.description}</p>
@@ -95,14 +75,7 @@ function renderProjects() {
     });
 }
 
-function getContrastColor(hexColor) {
-    // Simple contrast function for badge text color
-    const r = parseInt(hexColor.slice(1, 3), 16);
-    const g = parseInt(hexColor.slice(3, 5), 16);
-    const b = parseInt(hexColor.slice(5, 7), 16);
-    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    return luminance > 0.5 ? '#000000' : '#ffffff';
-}
+
 
 // ===== SMOOTH SCROLL =====
 function scrollToSection(e) {
@@ -120,6 +93,8 @@ function scrollToSection(e) {
 
 // ===== MOBILE MENU =====
 function updateMobileMenuVisibility() {
+    if (!mobileMenuToggle || !mainNav) return;
+    
     if (window.innerWidth <= 600) {
         mobileMenuToggle.style.display = 'flex';
         mainNav.style.display = 'none';
@@ -131,8 +106,11 @@ function updateMobileMenuVisibility() {
 }
 
 function toggleMobileMenu() {
-    mainNav.classList.toggle('active');
-    mainNav.style.display = mainNav.classList.contains('active') ? 'flex' : 'none';
+    if (!mainNav || !mobileMenuToggle) return;
+    
+    const isActive = mainNav.classList.toggle('active');
+    mainNav.style.display = isActive ? 'flex' : 'none';
+    mobileMenuToggle.setAttribute('aria-expanded', isActive.toString());
 }
 
 // Close mobile menu when a link is clicked
@@ -157,6 +135,8 @@ document.addEventListener('click', (e) => {
 
 // ===== BACK TO TOP =====
 function handleScrollToTop() {
+    if (!backToTopButton) return;
+    
     if (window.pageYOffset > 400) {
         backToTopButton.classList.add('visible');
     } else {
@@ -215,6 +195,16 @@ function hideThankYouModal() {
     thankYouModal.classList.remove('active');
 }
 
+//
+// ===== INIT =====
+//
+document.addEventListener('DOMContentLoaded', () => {
+    renderProjects();
+    updateMobileMenuVisibility();
+    setupScrollAnimations();
+    updateFooterYear();
+});
+
 // ===== SCROLL ANIMATIONS =====
 function setupScrollAnimations() {
     const observerOptions = {
@@ -272,37 +262,25 @@ function setupScrollAnimations() {
 }
 
 // ===== EVENT LISTENERS =====
+const debounce = (fn, delay) => {
+    let timeoutId;
+    return (...args) => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn.apply(this, args), delay);
+    };
+};
 
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded', () => {
-    renderProjects();
-    updateMobileMenuVisibility();
-    setupScrollAnimations();
-    updateFooterYear();
-    
-    if (contactBtn) {
-        contactBtn.addEventListener('click', function(event) {
-            if (event.target === this || this.contains(event.target)) {
-                // Your code here
-                console.log('Contact button clicked');
-                // Add code to scroll to contact form
-                const contactFormSection = document.getElementById("contact");
-                if (contactFormSection) {
-                    contactFormSection.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
-                }
-            }
-        });
-    }
-});
-navLinks.forEach(link => {
-    link.addEventListener('click', scrollToSection);
-});
+if (navLinks.length) {
+    navLinks.forEach(link => {
+        link.addEventListener('click', scrollToSection);
+    });
+}
 
-mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-window.addEventListener('resize', updateMobileMenuVisibility);
+if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+}
+
+window.addEventListener('resize', debounce(updateMobileMenuVisibility, 150));
 window.addEventListener('scroll', handleScrollToTop);
 
 if (backToTopButton) {
@@ -340,11 +318,3 @@ function updateFooterYear() {
         yearElement.textContent = new Date().getFullYear();
     }
 }
-
-// ===== INIT =====
-document.addEventListener('DOMContentLoaded', () => {
-    renderProjects();
-    updateMobileMenuVisibility();
-    setupScrollAnimations();
-    updateFooterYear();
-});

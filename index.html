@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Enric Esguerra – Full-Stack Developer</title>
   <meta name="description" content="Edmonton-based full-stack developer building playful web & desktop tools."/>
+  <meta name="theme-color" content="#000000"/>
+  <meta property="og:title" content="Enric Esguerra – Full-Stack Developer"/>
+  <meta property="og:description" content="Edmonton-based full-stack developer building playful web & desktop tools."/>
+  <meta property="og:type" content="website"/>
+  <link rel="canonical" href="https://enricjake.github.io/"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👨‍💻</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Satoshi:wght@500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
   <link rel="stylesheet" href="style.css"/>
@@ -21,7 +27,7 @@
   <header>
     <nav>
       <a href="#home" class="logo">Enric Esguerra</a>
-      <button id="mobileMenuToggle" aria-label="Toggle navigation menu">☰</button>
+      <button id="mobileMenuToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mainNav">☰</button>
       <ul id="mainNav">
         <li><a href="#about">About</a></li>
         <li><a href="#work">Projects</a></li>
@@ -34,7 +40,7 @@
   <section id="home" class="hero">
     <h1>Full-Stack Developer<br>based in Edmonton.</h1>
     <p>I turn ideas into playful web & desktop experiences—clean code, fast interfaces, human-centred design.</p>
-    <button id="contactBtn"><a href="#contact">Start a project</a></button>
+    <a href="#contact" class="contact-btn">Start a project</a>
   </section>
 
   <!-- ========= ABOUT ========= -->
@@ -68,16 +74,13 @@
     <p><a href="mailto:esguerraenric13@gmail.com">esguerraenric13@gmail.com</a></p>
     <p><a href="https://www.google.com/maps/place/Edmonton,+AB" target="_blank">Edmonton, Canada</a></p>
     
-    <form class="contact-form" action="https://formspree.io/f/xaqpzyql" method="POST" enctype="multipart/form-data">
-      <label>
-        <input type="text" name="name" required placeholder="Name">
-      </label>
-      <label>
-        <input type="email" name="email" required placeholder="Email">
-      </label>
-      <label>
-        <textarea name="message" required placeholder="Tell me about your idea..."></textarea>
-      </label>
+    <form class="contact-form" id="contactForm" action="https://formspree.io/f/xaqpzyql" method="POST" enctype="multipart/form-data">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required placeholder="Name">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required placeholder="Email">
+      <label for="message">Message</label>
+      <textarea id="message" name="message" required placeholder="Tell me about your idea..."></textarea>
       <button type="submit">Send</button>
     </form>
   </section>
