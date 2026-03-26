@@ -455,6 +455,16 @@ section.visible {
     flex: 0 0 320px;
 }
 
+.about-image a {
+    display: block;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-image a:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-hover);
+}
+
 .about-image img {
     width: 100%;
     max-width: 320px;
@@ -462,6 +472,7 @@ section.visible {
     box-shadow: var(--shadow);
     margin: 0 auto;
     display: block;
+    transition: transform 0.3s ease;
 }
 
 .project-tags {
