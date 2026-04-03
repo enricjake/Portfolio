@@ -1,5 +1,14 @@
 // ===== PROJECT DATA =====
 const projects = [
+    
+    {
+        title: "WinSet – Windows Toolkit",
+        description: "One-click Windows tuning presets for gamers & devs.",
+        link: "https://github.com/enricjake/WinSet",
+        technologies: ["Python", "Tkinter", "pywin32"],
+        category: "desktop",
+        img: "https://wallpapercave.com/wp/wp9378857.jpg"
+    },
     {
         title: "Bongolicious Cat",
         description: "Addictive cat clicker with upgrades & prestige system.",
@@ -15,14 +24,6 @@ const projects = [
         technologies: ["JavaScript", "DOM", "Web Storage"],
         category: "web",
         img: "https://media.istockphoto.com/id/1469754711/vector/trivia-time-neon-sign-geometric-frame-decoration-quiz-show-label-on-brick-wall-vector-stock.jpg?s=612x612&w=0&k=20&c=7D-_PFacHKOD6pGYMaLa0FkR9PdKjXqmb1zZ4tIhEDQ="
-    },
-    {
-        title: "WinSet – Windows Toolkit",
-        description: "One-click Windows tuning presets for gamers & devs.",
-        link: "https://github.com/enricjake/WinSet",
-        technologies: ["Python", "Tkinter", "pywin32"],
-        category: "desktop",
-        img: "https://wallpapercave.com/wp/wp9378857.jpg"
     },
     {
         title: "Weather Electron",
@@ -57,7 +58,7 @@ function renderProjects() {
 
         const techBadges = project.technologies
             .map(tech => {
-                return `<span style="background: #00ffcc; color: #0a0a0a">${tech}</span>`;
+                return `<span>${tech}</span>`;
             })
             .join("");
 
@@ -282,6 +283,7 @@ if (mobileMenuToggle) {
 
 window.addEventListener('resize', debounce(updateMobileMenuVisibility, 150));
 window.addEventListener('scroll', handleScrollToTop);
+window.addEventListener('scroll', handleNavScroll);
 
 if (backToTopButton) {
     backToTopButton.addEventListener('click', scrollToTop);
