@@ -1,6 +1,6 @@
 // ===== PROJECT DATA =====
 const projects = [
-    
+
     {
         title: "WinSet – Windows Toolkit",
         description: "One-click Windows tuning presets for gamers & devs.",
@@ -49,9 +49,9 @@ const closeModalBtn = document.getElementById("closeModal");
 // ===== RENDER PROJECTS =====
 function renderProjects() {
     if (!projectList) return;
-    
+
     projectList.innerHTML = "";
-    
+
     projects.forEach(project => {
         const card = document.createElement("div");
         card.classList.add("project-card");
@@ -83,7 +83,7 @@ function scrollToSection(e) {
     e.preventDefault();
     const targetId = this.getAttribute("href");
     const targetSection = document.querySelector(targetId);
-    
+
     if (targetSection) {
         targetSection.scrollIntoView({
             behavior: "smooth",
@@ -95,7 +95,7 @@ function scrollToSection(e) {
 // ===== MOBILE MENU =====
 function updateMobileMenuVisibility() {
     if (!mobileMenuToggle || !mainNav) return;
-    
+
     if (window.innerWidth <= 600) {
         mobileMenuToggle.style.display = 'flex';
         mainNav.style.display = 'none';
@@ -108,7 +108,7 @@ function updateMobileMenuVisibility() {
 
 function toggleMobileMenu() {
     if (!mainNav || !mobileMenuToggle) return;
-    
+
     const isActive = mainNav.classList.toggle('active');
     mainNav.style.display = isActive ? 'flex' : 'none';
     mobileMenuToggle.setAttribute('aria-expanded', isActive.toString());
@@ -137,8 +137,8 @@ document.addEventListener('click', (e) => {
 // ===== BACK TO TOP =====
 function handleScrollToTop() {
     if (!backToTopButton) return;
-    
-    if (window.pageYOffset > 400) {
+
+    if (window.scrollY > 400) {
         backToTopButton.classList.add('visible');
     } else {
         backToTopButton.classList.remove('visible');
@@ -149,18 +149,30 @@ function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// ===== NAV SCROLL =====
+function handleNavScroll() {
+    const header = document.querySelector('header');
+    if (!header) return;
+
+    if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
+}
+
 // ===== CONTACT FORM =====
 function handleContactFormSubmit(e) {
     e.preventDefault();
-    
+
     const formData = new FormData(contactForm);
     const submitButton = contactForm.querySelector('button[type="submit"]');
     const originalText = submitButton.textContent;
-    
+
     // Show loading state
     submitButton.textContent = 'Sending...';
     submitButton.disabled = true;
-    
+
     // Submit to Formspree
     fetch(contactForm.action, {
         method: 'POST',
@@ -169,23 +181,23 @@ function handleContactFormSubmit(e) {
             'Accept': 'application/json'
         }
     })
-    .then(response => {
-        if (response.ok) {
-            showThankYouModal();
-            contactForm.reset();
-        } else {
-            throw new Error('Form submission failed');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Sorry, there was an error sending your message. Please try again.');
-    })
-    .finally(() => {
-        // Reset button state
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
-    });
+        .then(response => {
+            if (response.ok) {
+                showThankYouModal();
+                contactForm.reset();
+            } else {
+                throw new Error('Form submission failed');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Sorry, there was an error sending your message. Please try again.');
+        })
+        .finally(() => {
+            // Reset button state
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+        });
 }
 
 function showThankYouModal() {
@@ -213,11 +225,11 @@ function setupScrollAnimations() {
         rootMargin: '0px',
         threshold: [0.1, 0.3, 0.7]
     };
-    
+
     const observerCallback = (entries) => {
         entries.forEach(entry => {
             const element = entry.target;
-            
+
             if (entry.isIntersecting) {
                 // Fade in based on how much of the element is visible
                 if (entry.intersectionRatio >= 0.1) {
@@ -229,28 +241,28 @@ function setupScrollAnimations() {
             }
         });
     };
-    
+
     const observer = new IntersectionObserver(observerCallback, observerOptions);
-    
+
     // Observe all sections except hero
     sections.forEach(section => {
         if (!section.classList.contains('hero')) {
             observer.observe(section);
         }
     });
-    
+
     // Observe footer
     const footer = document.querySelector('footer');
     if (footer) {
         observer.observe(footer);
     }
-    
+
     // Observe social icons
     const socialContainer = document.querySelector('.social');
     if (socialContainer) {
         observer.observe(socialContainer);
     }
-    
+
     // Trigger initial visibility
     setTimeout(() => {
         sections.forEach(section => {
