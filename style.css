@@ -324,21 +324,21 @@ section.visible {
 .contact-btn {
     display: inline-block;
     padding: 14px 32px;
-    border: 1px solid rgba(0, 255, 204, 0.3);
+    border: 1px solid var(--accent-color);
     border-radius: 12px;
     color: var(--accent-color);
     font-weight: 600;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: linear-gradient(135deg, rgba(0, 255, 204, 0.05), rgba(168, 85, 247, 0.05));
+    background: transparent;
     cursor: pointer;
     font-family: 'Manrope', sans-serif;
 }
 
 .contact-btn:hover {
-    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+    background: var(--accent-color);
     color: var(--bg-color);
     box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
-    border-color: transparent;
+    border-color: var(--accent-color);
 }
 
 /* ===== SECTION TITLES ===== */
@@ -449,9 +449,9 @@ section.visible {
 }
 
 .project-btn:hover {
-    background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+    background: var(--accent-color);
     color: var(--bg-color);
-    border-color: transparent;
+    border-color: var(--accent-color);
     box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
 }
 
@@ -680,9 +680,9 @@ footer p {
     position: fixed;
     bottom: 24px;
     right: 24px;
-    background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+    background: var(--accent-color);
     color: var(--bg-color);
-    border: none;
+    border: 1px solid var(--accent-color);
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -698,18 +698,11 @@ footer p {
     transform: translateY(20px) scale(0.8);
 }
 
-#backTop.visible {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
-
 #backTop:hover {
     transform: translateY(-3px) scale(1.05);
     box-shadow: 0 8px 30px rgba(0, 255, 204, 0.6);
-    background: linear-gradient(135deg, #00e6b8, var(--accent-color));
+    background: transparent;
+    color: var(--accent-color);
 }
 
 #backTop:active {
@@ -720,18 +713,19 @@ footer p {
 button {
     padding: 14px 32px;
     font-size: 1rem;
-    border: none;
+    border: 1px solid var(--accent-color);
     border-radius: 4px;
-    background: var(--accent-color);
-    color: var(--bg-color);
+    background: transparent;
+    color: var(--accent-color);
     cursor: pointer;
     font-weight: 600;
     font-family: 'Manrope', sans-serif;
-    transition: background 0.25s, transform 0.2s;
+    transition: all 0.25s, transform 0.2s;
 }
 
 button:hover {
-    background: var(--accent-hover);
+    background: var(--accent-color);
+    color: var(--bg-color);
     transform: translateY(-2px);
 }
 
@@ -927,19 +921,20 @@ textarea:focus {
 }
 
 .modal-close-btn {
-    background: var(--accent-color);
-    color: var(--bg-color);
-    border: none;
+    background: transparent;
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
     padding: 12px 24px;
     border-radius: 4px;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
+    transition: all 0.2s;
     font-family: 'Manrope', sans-serif;
 }
 
 .modal-close-btn:hover {
-    background: var(--accent-hover);
+    background: var(--accent-color);
+    color: var(--bg-color);
     transform: translateY(-2px);
 }
 
