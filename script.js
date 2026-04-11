@@ -1,6 +1,5 @@
 // ===== PROJECT DATA =====
 const projects = [
-
     {
         title: "WinSet – Windows Toolkit",
         description: "One-click Windows tuning presets for gamers & devs.",
@@ -35,300 +34,181 @@ const projects = [
     }
 ];
 
-// ===== SELECT ELEMENTS =====
-const projectList = document.getElementById("projectList");
-const navLinks = document.querySelectorAll("nav a");
-const sections = document.querySelectorAll("section");
-const contactForm = document.getElementById("contactForm");
-const mobileMenuToggle = document.getElementById("mobileMenuToggle");
-const mainNav = document.getElementById("mainNav");
-const backToTopButton = document.getElementById("backTop");
-const thankYouModal = document.getElementById("thankYouModal");
-const closeModalBtn = document.getElementById("closeModal");
+// ===== DOM ELEMENTS =====
+const elements = {
+    projectList: document.getElementById("projectList"),
+    mainNav: document.getElementById("mainNav"),
+    mobileMenuToggle: document.getElementById("mobileMenuToggle"),
+    backTop: document.getElementById("backTop"),
+    thankYouModal: document.getElementById("thankYouModal"),
+    closeModalBtn: document.getElementById("closeModal"),
+    contactForm: document.getElementById("contactForm"),
+    year: document.getElementById("year"),
+    header: document.querySelector("header"),
+    navLinks: document.querySelectorAll("nav a"),
+    sections: document.querySelectorAll("section:not(.hero)"),
+    footer: document.querySelector("footer"),
+    social: document.querySelector(".social")
+};
 
 // ===== RENDER PROJECTS =====
 function renderProjects() {
-    if (!projectList) return;
+    if (!elements.projectList) return;
 
-    projectList.innerHTML = "";
-
-    projects.forEach(project => {
-        const card = document.createElement("div");
-        card.classList.add("project-card");
-
-        const techBadges = project.technologies
-            .map(tech => {
-                return `<span>${tech}</span>`;
-            })
-            .join("");
-
-        card.innerHTML = `
+    elements.projectList.innerHTML = projects.map(project => `
+        <div class="project-card" data-link="${project.link}">
             <img src="${project.img}" alt="${project.title}" class="project-image" loading="lazy">
             <div class="project-content">
                 <h3>${project.title}</h3>
                 <p>${project.description}</p>
-                <div class="project-tech">${techBadges}</div>
-                <a href="${project.link}" class="project-btn" target="_blank" rel="noopener">View →</a>
+                <div class="project-tech">
+                    ${project.technologies.map(tech => `<span>${tech}</span>`).join("")}
+                </div>
             </div>
-        `;
+        </div>
+    `).join("");
 
-        projectList.appendChild(card);
+    // Add click listeners to cards
+    document.querySelectorAll(".project-card").forEach(card => {
+        card.addEventListener("click", () => {
+            window.open(card.dataset.link, "_blank", "noopener");
+        });
     });
 }
-
-
 
 // ===== SMOOTH SCROLL =====
 function scrollToSection(e) {
     e.preventDefault();
-    const targetId = this.getAttribute("href");
-    const targetSection = document.querySelector(targetId);
-
-    if (targetSection) {
-        targetSection.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-    }
+    const target = document.querySelector(this.getAttribute("href"));
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 // ===== MOBILE MENU =====
-function updateMobileMenuVisibility() {
-    if (!mobileMenuToggle || !mainNav) return;
-
-    if (window.innerWidth <= 600) {
-        mobileMenuToggle.style.display = 'flex';
-        mainNav.style.display = 'none';
-    } else {
-        mobileMenuToggle.style.display = 'none';
-        mainNav.style.display = 'flex';
-        mainNav.classList.remove('active');
-    }
-}
-
 function toggleMobileMenu() {
-    if (!mainNav || !mobileMenuToggle) return;
-
-    const isActive = mainNav.classList.toggle('active');
-    mainNav.style.display = isActive ? 'flex' : 'none';
-    mobileMenuToggle.setAttribute('aria-expanded', isActive.toString());
+    if (!elements.mainNav || !elements.mobileMenuToggle) return;
+    
+    const isActive = elements.mainNav.classList.toggle("active");
+    elements.mainNav.style.display = isActive ? "flex" : "none";
+    elements.mobileMenuToggle.setAttribute("aria-expanded", isActive);
 }
 
-// Close mobile menu when a link is clicked
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        if (window.innerWidth <= 600) {
-            mainNav.classList.remove('active');
-            mainNav.style.display = 'none';
-        }
-    });
-});
-
-// Close mobile menu when clicking outside
-document.addEventListener('click', (e) => {
-    if (window.innerWidth <= 600 && mainNav.classList.contains('active')) {
-        if (!e.target.closest('nav')) {
-            mainNav.classList.remove('active');
-            mainNav.style.display = 'none';
-        }
-    }
-});
-
-// ===== BACK TO TOP =====
-function handleScrollToTop() {
-    if (!backToTopButton) return;
-
-    if (window.scrollY > 400) {
-        backToTopButton.classList.add('visible');
-    } else {
-        backToTopButton.classList.remove('visible');
+function closeMobileMenu() {
+    if (window.innerWidth <= 600 && elements.mainNav?.classList.contains("active")) {
+        elements.mainNav.classList.remove("active");
+        elements.mainNav.style.display = "none";
     }
 }
 
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+// ===== SCROLL HANDLERS =====
+function handleScroll() {
+    const scrollY = window.scrollY;
 
-// ===== NAV SCROLL =====
-function handleNavScroll() {
-    const header = document.querySelector('header');
-    if (!header) return;
+    // Back to top button
+    if (elements.backTop) {
+        const show = scrollY > 400;
+        elements.backTop.classList.toggle("visible", show);
+    }
 
-    if (window.scrollY > 50) {
-        header.classList.add('scrolled');
-    } else {
-        header.classList.remove('scrolled');
+    // Header scroll state
+    if (elements.header) {
+        elements.header.classList.toggle("scrolled", scrollY > 50);
     }
 }
 
 // ===== CONTACT FORM =====
-function handleContactFormSubmit(e) {
+async function handleFormSubmit(e) {
     e.preventDefault();
+    if (!elements.contactForm) return;
 
-    const formData = new FormData(contactForm);
-    const submitButton = contactForm.querySelector('button[type="submit"]');
-    const originalText = submitButton.textContent;
+    const btn = elements.contactForm.querySelector('button[type="submit"]');
+    const originalText = btn.textContent;
+    btn.textContent = "Sending...";
+    btn.disabled = true;
 
-    // Show loading state
-    submitButton.textContent = 'Sending...';
-    submitButton.disabled = true;
-
-    // Submit to Formspree
-    fetch(contactForm.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-        .then(response => {
-            if (response.ok) {
-                showThankYouModal();
-                contactForm.reset();
-            } else {
-                throw new Error('Form submission failed');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Sorry, there was an error sending your message. Please try again.');
-        })
-        .finally(() => {
-            // Reset button state
-            submitButton.textContent = originalText;
-            submitButton.disabled = false;
+    try {
+        const res = await fetch(elements.contactForm.action, {
+            method: "POST",
+            body: new FormData(elements.contactForm),
+            headers: { "Accept": "application/json" }
         });
+
+        if (res.ok) {
+            elements.contactForm.reset();
+            showModal();
+        } else throw new Error();
+    } catch (err) {
+        alert("Failed to send. Please try again.");
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
 }
 
-function showThankYouModal() {
-    thankYouModal.classList.add('active');
+function showModal() {
+    elements.thankYouModal?.classList.add("active");
 }
 
-function hideThankYouModal() {
-    thankYouModal.classList.remove('active');
+function hideModal() {
+    elements.thankYouModal?.classList.remove("active");
 }
-
-//
-// ===== INIT =====
-//
-document.addEventListener('DOMContentLoaded', () => {
-    renderProjects();
-    updateMobileMenuVisibility();
-    setupScrollAnimations();
-    updateFooterYear();
-});
 
 // ===== SCROLL ANIMATIONS =====
-function setupScrollAnimations() {
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: [0.1, 0.3, 0.7]
-    };
-
-    const observerCallback = (entries) => {
+function setupAnimations() {
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            const element = entry.target;
-
-            if (entry.isIntersecting) {
-                // Fade in based on how much of the element is visible
-                if (entry.intersectionRatio >= 0.1) {
-                    element.classList.add('visible');
-                }
-            } else {
-                // Fade out when element is no longer visible
-                element.classList.remove('visible');
-            }
+            entry.target.classList.toggle("visible", entry.isIntersecting);
         });
-    };
+    }, { threshold: 0.1 });
 
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-
-    // Observe all sections except hero
-    sections.forEach(section => {
-        if (!section.classList.contains('hero')) {
-            observer.observe(section);
-        }
-    });
-
-    // Observe footer
-    const footer = document.querySelector('footer');
-    if (footer) {
-        observer.observe(footer);
-    }
-
-    // Observe social icons
-    const socialContainer = document.querySelector('.social');
-    if (socialContainer) {
-        observer.observe(socialContainer);
-    }
-
-    // Trigger initial visibility
-    setTimeout(() => {
-        sections.forEach(section => {
-            const rect = section.getBoundingClientRect();
-            if (rect.top <= window.innerHeight * 0.9 && rect.bottom >= window.innerHeight * 0.1) {
-                section.classList.add('visible');
-            }
-        });
-    }, 100);
+    elements.sections.forEach(s => observer.observe(s));
+    elements.footer && observer.observe(elements.footer);
+    elements.social && observer.observe(elements.social);
 }
 
-// ===== EVENT LISTENERS =====
-const debounce = (fn, delay) => {
-    let timeoutId;
-    return (...args) => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => fn.apply(this, args), delay);
-    };
+// ===== UTILITIES =====
+const debounce = (fn, ms) => {
+    let id;
+    return (...a) => (clearTimeout(id), id = setTimeout(fn, ms, ...a));
 };
 
-if (navLinks.length) {
-    navLinks.forEach(link => {
-        link.addEventListener('click', scrollToSection);
-    });
-}
+// ===== INIT =====
+document.addEventListener("DOMContentLoaded", () => {
+    // Set year
+    if (elements.year) elements.year.textContent = new Date().getFullYear();
 
-if (mobileMenuToggle) {
-    mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-}
+    // Render
+    renderProjects();
+    setupAnimations();
 
-window.addEventListener('resize', debounce(updateMobileMenuVisibility, 150));
-window.addEventListener('scroll', handleScrollToTop);
-window.addEventListener('scroll', handleNavScroll);
+    // Mobile menu
+    elements.mobileMenuToggle?.addEventListener("click", toggleMobileMenu);
+    elements.navLinks.forEach(link => link.addEventListener("click", (e) => {
+        scrollToSection(e);
+        closeMobileMenu();
+    }));
+    document.addEventListener("click", closeMobileMenu);
 
-if (backToTopButton) {
-    backToTopButton.addEventListener('click', scrollToTop);
-}
+    // Form
+    elements.contactForm?.addEventListener("submit", handleFormSubmit);
 
-if (contactForm) {
-    contactForm.addEventListener('submit', handleContactFormSubmit);
-}
+    // Modal
+    elements.closeModalBtn?.addEventListener("click", hideModal);
+    elements.thankYouModal?.addEventListener("click", e => e.target === elements.thankYouModal && hideModal());
+    document.addEventListener("keydown", e => e.key === "Escape" && hideModal());
 
-if (closeModalBtn) {
-    closeModalBtn.addEventListener('click', hideThankYouModal);
-}
+    // Scroll handlers
+    window.addEventListener("scroll", debounce(handleScroll, 50));
+    elements.backTop?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-// Close modal when clicking overlay
-if (thankYouModal) {
-    thankYouModal.addEventListener('click', (e) => {
-        if (e.target === thankYouModal) {
-            hideThankYouModal();
+    // Resize
+    window.addEventListener("resize", debounce(() => {
+        if (window.innerWidth > 600) {
+            elements.mainNav?.classList.remove("active");
+            elements.mainNav && (elements.mainNav.style.display = "flex");
+            elements.mobileMenuToggle && (elements.mobileMenuToggle.style.display = "none");
+        } else {
+            elements.mobileMenuToggle && (elements.mobileMenuToggle.style.display = "flex");
+            elements.mainNav && (elements.mainNav.style.display = "none");
         }
-    });
-}
-
-// Close modal with Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && thankYouModal.classList.contains('active')) {
-        hideThankYouModal();
-    }
+    }, 150));
 });
-
-// ===== FOOTER YEAR =====
-function updateFooterYear() {
-    const yearElement = document.getElementById('year');
-    if (yearElement) {
-        yearElement.textContent = new Date().getFullYear();
-    }
-}

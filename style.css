@@ -11,6 +11,12 @@
     --card-border: rgba(255, 255, 255, 0.08);
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.5);
+    
+    /* Spacing */
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
 }
 
 /* ===== GLOBAL RESET ===== */
@@ -66,7 +72,6 @@ a {
     height: 100%;
     opacity: 0.4;
     mix-blend-mode: screen;
-    will-change: transform;
 }
 
 .layer1 {
@@ -180,6 +185,12 @@ header.scrolled {
     -webkit-backdrop-filter: blur(15px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     padding: 12px 6vw;
+}
+
+@supports not (backdrop-filter: blur(15px)) {
+    header.scrolled {
+        background: rgba(10, 10, 10, 0.9);
+    }
 }
 
 nav {
@@ -310,6 +321,7 @@ section.visible {
     font-weight: 800;
     background: linear-gradient(to right, #ffffff 30%, var(--accent-color), var(--secondary-color));
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -321,29 +333,46 @@ section.visible {
     line-height: 1.6;
 }
 
+/* ===== CONTACT BUTTON ===== */
+.contact-form button[type="submit"],
 .contact-btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 14px 32px;
-    border: 1px solid var(--accent-color);
-    border-radius: 12px;
-    color: var(--accent-color);
+    font-size: 1rem;
     font-weight: 600;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: transparent;
-    cursor: pointer;
-    font-family: 'Manrope', sans-serif;
-}
-
-.contact-btn:hover {
+    border-radius: 10px;
     background: var(--accent-color);
     color: var(--bg-color);
-    box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
-    border-color: var(--accent-color);
+    cursor: pointer;
+    font-family: 'Manrope', sans-serif;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1.5px solid var(--accent-color);
+}
+
+.contact-form button[type="submit"] {
+    margin-top: 8px;
+}
+
+.contact-form button[type="submit"]:hover,
+.contact-btn:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
+    transform: translateY(-3px);
+}
+
+.contact-form button[type="submit"]:active,
+.contact-btn:active {
+    transform: translateY(-1px);
 }
 
 /* ===== SECTION TITLES ===== */
 .section-title {
-    font-size: 2.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 1.8rem;
     margin-bottom: 48px;
     position: relative;
     text-align: center;
@@ -364,21 +393,30 @@ section.visible {
 
 #projectList {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px;
-    margin-bottom: 80px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
     padding: 40px 0;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .project-card {
+    /* Layout */
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    max-width: 100%;
+
+    /* Background & Borders */
     background: rgba(20, 20, 20, 0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 16px;
-    overflow: hidden;
+
+    /* Effects */
     box-shadow: var(--shadow);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .project-card:hover {
@@ -431,28 +469,7 @@ section.visible {
     padding: 4px 10px;
     border-radius: 4px;
     font-size: 0.75rem;
-    font-weight: bold;
-}
-
-.project-btn {
-    display: inline-block;
-    padding: 8px 20px;
-    border: 1px solid var(--accent-color);
-    border-radius: 8px;
-    color: var(--accent-color);
-    font-weight: 500;
-    transition: all 0.3s ease;
-    font-size: 0.9rem;
-    text-align: center;
-    margin: 0 auto;
-    background: transparent;
-}
-
-.project-btn:hover {
-    background: var(--accent-color);
-    color: var(--bg-color);
-    border-color: var(--accent-color);
-    box-shadow: 0 0 15px rgba(0, 255, 204, 0.3);
+    font-weight: 600;
 }
 
 /* ===== ABOUT SECTION ===== */
@@ -511,27 +528,13 @@ section.visible {
 }
 
 .project-tags span {
-    background: #2a2a2a;
-    color: #fff;
+    background: var(--accent-color);
+    color: var(--bg-color);
     padding: 6px 16px;
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 0.85rem;
-    font-weight: bold;
-}
-
-.project-tags span:nth-child(1) { background: var(--accent-color); color: var(--bg-color); } /* JavaScript */
-.project-tags span:nth-child(2) { background: var(--accent-color); color: var(--bg-color); } /* React */
-.project-tags span:nth-child(3) { background: var(--accent-color); color: var(--bg-color); } /* Node.js */
-.project-tags span:nth-child(4) { background: var(--accent-color); color: var(--bg-color); } /* Python */
-.project-tags span:nth-child(5) { background: var(--accent-color); color: var(--bg-color); } /* Electron */
-.project-tags span:nth-child(6) { background: var(--accent-color); color: var(--bg-color); } /* Tailwind */
-
-/* Updated Section Title Style */
-.section-title {
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-size: 1.8rem;
+    font-weight: 600;
 }
 
 /* ===== CONTACT SECTION ===== */
@@ -605,10 +608,6 @@ section.visible {
 .contact-form textarea {
     min-height: 120px;
     resize: vertical;
-}
-
-.contact-form button {
-    margin-top: 8px;
 }
 
 /* ===== FOOTER ===== */
@@ -710,26 +709,70 @@ footer p {
 }
 
 /* ===== BUTTONS ===== */
-button {
-    padding: 14px 32px;
-    font-size: 1rem;
-    border: 1px solid var(--accent-color);
-    border-radius: 4px;
+.btn, button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 8px;
     background: transparent;
     color: var(--accent-color);
     cursor: pointer;
-    font-weight: 600;
     font-family: 'Manrope', sans-serif;
-    transition: all 0.25s, transform 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1.5px solid var(--accent-color);
 }
 
-button:hover {
+.btn:hover, button:hover {
     background: var(--accent-color);
     color: var(--bg-color);
+    box-shadow: 0 0 20px rgba(0, 255, 204, 0.35);
     transform: translateY(-2px);
 }
 
+.btn:active, button:active {
+    transform: translateY(0);
+}
+
+/* Primary Button Variant */
+.btn-primary {
+    background: var(--accent-color);
+    color: var(--bg-color);
+    border-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+}
+
+/* Small Button Variant */
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+}
+
+/* Project Card Button (Hidden - click triggers on card) */
+.project-btn {
+    display: none;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 1200px) {
+    #projectList {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    #projectList {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     section {
         padding: 80px 4vw;
@@ -762,24 +805,6 @@ button:hover {
     .about-image img {
         max-width: 280px;
         margin: 0 auto;
-    }
-    
-    .section-title {
-        font-size: 2.3rem;
-        margin-bottom: 48px;
-        position: relative;
-        text-align: center;
-    }
-
-    .section-title::after {
-        content: "";
-        width: 40px;
-        height: 3px;
-        background: var(--accent-color);
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: -12px;
     }
 
     #contact {
@@ -814,11 +839,6 @@ button:hover {
     }
     
     #contactBtn {
-        padding: 12px 24px;
-        font-size: 0.9rem;
-    }
-    
-    .contact-btn {
         padding: 12px 24px;
         font-size: 0.9rem;
     }
@@ -871,6 +891,7 @@ textarea:focus {
     height: 100%;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
