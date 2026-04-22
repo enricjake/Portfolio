@@ -1,3 +1,6 @@
+// ===== CONSTANTS =====
+const MOBILE_BREAKPOINT = 600;
+
 // ===== PROJECT DATA =====
 const projects = [
     {
@@ -57,7 +60,7 @@ function renderProjects() {
 
     elements.projectList.innerHTML = projects.map(project => `
         <div class="project-card" data-link="${project.link}">
-            <img src="${project.img}" alt="${project.title}" class="project-image" loading="lazy">
+            <img src="${project.img}" alt="${project.title}" class="project-image" loading="lazy" onerror="this.src='https://via.placeholder.com/400x180/1a1a1a/888888?text=Image+Not+Available'">
             <div class="project-content">
                 <h3>${project.title}</h3>
                 <p>${project.description}</p>
@@ -93,9 +96,15 @@ function toggleMobileMenu() {
 }
 
 function closeMobileMenu() {
-    if (window.innerWidth <= 600 && elements.mainNav?.classList.contains("active")) {
+    if (window.innerWidth <= MOBILE_BREAKPOINT && elements.mainNav?.classList.contains("active")) {
         elements.mainNav.classList.remove("active");
         elements.mainNav.style.display = "none";
+    }
+}
+
+function handleDocumentClick(e) {
+    if (!elements.mainNav?.contains(e.target) && !elements.mobileMenuToggle?.contains(e.target)) {
+        closeMobileMenu();
     }
 }
 
@@ -186,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
         scrollToSection(e);
         closeMobileMenu();
     }));
-    document.addEventListener("click", closeMobileMenu);
+    document.addEventListener("click", handleDocumentClick);
 
     // Form
     elements.contactForm?.addEventListener("submit", handleFormSubmit);
@@ -202,13 +211,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Resize
     window.addEventListener("resize", debounce(() => {
-        if (window.innerWidth > 600) {
+        if (window.innerWidth > MOBILE_BREAKPOINT) {
             elements.mainNav?.classList.remove("active");
-            elements.mainNav && (elements.mainNav.style.display = "flex");
-            elements.mobileMenuToggle && (elements.mobileMenuToggle.style.display = "none");
-        } else {
-            elements.mobileMenuToggle && (elements.mobileMenuToggle.style.display = "flex");
-            elements.mainNav && (elements.mainNav.style.display = "none");
         }
     }, 150));
 });

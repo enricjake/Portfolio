@@ -687,7 +687,6 @@ footer p {
     height: 50px;
     font-size: 1.2rem;
     cursor: pointer;
-    display: none;
     z-index: 100;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 20px rgba(0, 255, 204, 0.4);
@@ -695,6 +694,7 @@ footer p {
     -webkit-backdrop-filter: blur(10px);
     opacity: 0;
     transform: translateY(20px) scale(0.8);
+    pointer-events: none;
 }
 
 #backTop:hover {
@@ -706,6 +706,12 @@ footer p {
 
 #backTop:active {
     transform: translateY(-1px) scale(0.98);
+}
+
+#backTop.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
 }
 
 /* ===== BUTTONS ===== */
@@ -838,7 +844,7 @@ footer p {
         height: 150px;
     }
     
-    #contactBtn {
+    .contact-btn {
         padding: 12px 24px;
         font-size: 0.9rem;
     }
