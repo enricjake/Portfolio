@@ -1,16 +1,16 @@
 /* ===== CSS VARIABLES ===== */
 :root {
-    --bg-color: #050505;
-    --text-color: #ffffff;
-    --text-muted: #888888;
-    --accent-color: #00ffcc;
-    --accent-hover: #00e6b8;
-    --secondary-color: #a855f7;
-    --secondary-hover: #c084fc;
-    --card-bg: rgba(20, 20, 20, 0.7);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    --shadow-hover: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --bg-color: #f8fafc;
+    --text-color: #1e293b;
+    --text-muted: #64748b;
+    --accent-color: #3b82f6;
+    --accent-hover: #2563eb;
+    --secondary-color: #8b5cf6;
+    --secondary-hover: #7c3aed;
+    --card-bg: rgba(255, 255, 255, 0.7);
+    --card-border: rgba(59, 130, 246, 0.15);
+    --shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+    --shadow-hover: 0 10px 30px rgba(59, 130, 246, 0.15);
     
     /* Spacing */
     --spacing-sm: 8px;
@@ -61,7 +61,7 @@ a {
     pointer-events: none;
     z-index: -1;
     overflow: hidden;
-    background: #0a0a0a;
+    background: #f8fafc;
 }
 
 .gradient-layer {
@@ -70,18 +70,18 @@ a {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.4;
-    mix-blend-mode: screen;
+    opacity: 0.8;
+    mix-blend-mode: multiply;
 }
 
 .layer1 {
     background: linear-gradient(
         45deg,
-        rgba(0, 255, 204, 0.2) 0%,
-        rgba(168, 85, 247, 0.15) 25%,
-        rgba(240, 147, 251, 0.2) 50%,
-        rgba(79, 172, 254, 0.15) 75%,
-        rgba(0, 255, 204, 0.2) 100%
+        rgba(59, 130, 246, 0.4) 0%,
+        rgba(139, 92, 246, 0.25) 25%,
+        rgba(147, 197, 253, 0.35) 50%,
+        rgba(125, 211, 252, 0.25) 75%,
+        rgba(59, 130, 246, 0.4) 100%
     );
     background-size: 400% 400%;
     animation: gradientFlow1 30s ease infinite;
@@ -90,10 +90,10 @@ a {
 .layer2 {
     background: linear-gradient(
         -45deg,
-        rgba(118, 75, 162, 0.15) 0%,
-        rgba(0, 230, 184, 0.1) 33%,
-        rgba(245, 87, 108, 0.15) 66%,
-        rgba(56, 249, 215, 0.1) 100%
+        rgba(99, 102, 241, 0.35) 0%,
+        rgba(125, 211, 252, 0.2) 33%,
+        rgba(196, 181, 253, 0.3) 66%,
+        rgba(165, 243, 252, 0.2) 100%
     );
     background-size: 300% 300%;
     animation: gradientFlow2 35s ease infinite;
@@ -102,9 +102,9 @@ a {
 .layer3 {
     background: linear-gradient(
         90deg,
-        rgba(67, 233, 123, 0.1) 0%,
-        rgba(0, 242, 254, 0.1) 50%,
-        rgba(67, 233, 123, 0.1) 100%
+        rgba(59, 130, 246, 0.25) 0%,
+        rgba(125, 211, 252, 0.25) 50%,
+        rgba(59, 130, 246, 0.25) 100%
     );
     background-size: 200% 200%;
     animation: gradientFlow3 25s ease infinite;
@@ -169,27 +169,29 @@ header, nav {
     top: 0;
     left: 0;
     right: 0;
-    background: transparent;
-    backdrop-filter: blur(0px);
+    background: rgba(248, 250, 252, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 18px 6vw;
+    border-bottom: 1px solid rgba(59, 130, 246, 0.08);
 }
 
 header.scrolled {
-    background: rgba(10, 10, 10, 0.7);
+    background: rgba(248, 250, 252, 0.95);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(59, 130, 246, 0.15);
     padding: 12px 6vw;
 }
 
 @supports not (backdrop-filter: blur(15px)) {
     header.scrolled {
-        background: rgba(10, 10, 10, 0.9);
+        background: rgba(248, 250, 252, 0.98);
     }
 }
 
@@ -205,6 +207,7 @@ nav {
     font-family: 'Satoshi', sans-serif;
     position: absolute;
     left: 6vw;
+    color: var(--text-color);
 }
 
 nav ul {
@@ -246,7 +249,7 @@ nav a:hover {
 }
 
 #mobileMenuToggle:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(59, 130, 246, 0.1);
     transform: scale(1.1);
 }
 
@@ -262,13 +265,14 @@ nav a:hover {
         background: var(--bg-color);
         padding: 12px 24px;
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
         flex-direction: column;
         gap: 16px;
         opacity: 0;
         visibility: hidden;
         transform: translateY(-10px);
         transition: all 0.3s ease;
+        border: 1px solid rgba(59, 130, 246, 0.1);
     }
     
     nav ul.active {
@@ -319,7 +323,7 @@ section.visible {
     line-height: 1.1;
     margin-bottom: 24px;
     font-weight: 800;
-    background: linear-gradient(to right, #ffffff 30%, var(--accent-color), var(--secondary-color));
+    background: linear-gradient(to right, #1e293b 30%, var(--accent-color), var(--secondary-color));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -344,7 +348,7 @@ section.visible {
     font-weight: 600;
     border-radius: 10px;
     background: var(--accent-color);
-    color: var(--bg-color);
+    color: white;
     cursor: pointer;
     font-family: 'Manrope', sans-serif;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -359,7 +363,7 @@ section.visible {
 .contact-btn:hover {
     background: var(--accent-hover);
     border-color: var(--accent-hover);
-    box-shadow: 0 0 25px rgba(0, 255, 204, 0.5);
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
     transform: translateY(-3px);
 }
 
@@ -376,6 +380,7 @@ section.visible {
     margin-bottom: 48px;
     position: relative;
     text-align: center;
+    color: var(--text-color);
 }
 
 .section-title::after {
@@ -390,7 +395,6 @@ section.visible {
 }
 
 /* ===== PROJECTS SECTION ===== */
-
 #projectList {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -408,10 +412,10 @@ section.visible {
     max-width: 100%;
 
     /* Background & Borders */
-    background: rgba(20, 20, 20, 0.6);
+    background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.1);
     border-radius: 16px;
 
     /* Effects */
@@ -421,7 +425,7 @@ section.visible {
 
 .project-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 12px 40px rgba(0, 255, 204, 0.12), 0 0 20px rgba(168, 85, 247, 0.08);
+    box-shadow: 0 12px 40px rgba(59, 130, 246, 0.12), 0 0 20px rgba(139, 92, 246, 0.08);
     border-color: var(--accent-color);
 }
 
@@ -465,7 +469,7 @@ section.visible {
 
 .project-tech span {
     background: var(--accent-color);
-    color: var(--bg-color);
+    color: white;
     padding: 4px 10px;
     border-radius: 4px;
     font-size: 0.75rem;
@@ -512,11 +516,11 @@ section.visible {
     width: 100%;
     max-width: 320px;
     border-radius: 24px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
     margin: 0 auto;
     display: block;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.15);
 }
 
 .project-tags {
@@ -529,10 +533,10 @@ section.visible {
 
 .project-tags span {
     background: var(--accent-color);
-    color: var(--bg-color);
+    color: white;
     padding: 6px 16px;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(59, 130, 246, 0.15);
     font-size: 0.85rem;
     font-weight: 600;
 }
@@ -589,13 +593,13 @@ section.visible {
 .contact-form textarea {
     width: 100%;
     padding: 14px 18px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--card-border);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(59, 130, 246, 0.15);
     border-radius: 8px;
     color: var(--text-color);
     font-family: 'Manrope', sans-serif;
     font-size: 1rem;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s;
     margin-top: 4px;
 }
 
@@ -603,6 +607,7 @@ section.visible {
 .contact-form textarea:focus {
     outline: none;
     border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .contact-form textarea {
@@ -680,7 +685,7 @@ footer p {
     bottom: 24px;
     right: 24px;
     background: var(--accent-color);
-    color: var(--bg-color);
+    color: white;
     border: 1px solid var(--accent-color);
     border-radius: 50%;
     width: 50px;
@@ -689,7 +694,7 @@ footer p {
     cursor: pointer;
     z-index: 100;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 20px rgba(0, 255, 204, 0.4);
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     opacity: 0;
@@ -699,7 +704,7 @@ footer p {
 
 #backTop:hover {
     transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 8px 30px rgba(0, 255, 204, 0.6);
+    box-shadow: 0 8px 30px rgba(59, 130, 246, 0.5);
     background: transparent;
     color: var(--accent-color);
 }
@@ -733,8 +738,8 @@ footer p {
 
 .btn:hover, button:hover {
     background: var(--accent-color);
-    color: var(--bg-color);
-    box-shadow: 0 0 20px rgba(0, 255, 204, 0.35);
+    color: white;
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
     transform: translateY(-2px);
 }
 
@@ -745,7 +750,7 @@ footer p {
 /* Primary Button Variant */
 .btn-primary {
     background: var(--accent-color);
-    color: var(--bg-color);
+    color: white;
     border-color: var(--accent-color);
 }
 
@@ -865,18 +870,22 @@ footer p {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #333;
+    background: #94a3b8;
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #444;
+    background: #64748b;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
 }
 
 /* ===== SELECTION ===== */
 ::selection {
     background: var(--accent-color);
-    color: var(--bg-color);
+    color: white;
 }
 
 /* ===== FOCUS STATES ===== */
@@ -895,7 +904,7 @@ textarea:focus {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(15, 23, 42, 0.6);
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     display: flex;
@@ -914,7 +923,7 @@ textarea:focus {
 
 .modal-content {
     background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    border: 1px solid rgba(59, 130, 246, 0.15);
     border-radius: 12px;
     padding: 40px;
     text-align: center;
@@ -961,7 +970,7 @@ textarea:focus {
 
 .modal-close-btn:hover {
     background: var(--accent-color);
-    color: var(--bg-color);
+    color: white;
     transform: translateY(-2px);
 }
 
@@ -979,7 +988,7 @@ textarea:focus {
 
 /* ===== LOADING STATE ===== */
 .image-loading {
-    background: linear-gradient(90deg, #1a1a1a 25%, #2a2a2a 50%, #1a1a1a 75%);
+    background: linear-gradient(90deg, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%);
     background-size: 200% 100%;
     animation: loading 1.5s infinite;
 }
