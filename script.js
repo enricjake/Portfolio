@@ -94,12 +94,119 @@ function toggleMobileMenu() {
 function setupAnimations() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
+            // Toggle visible class based on whether element is in viewport
+            // This makes animations work both when scrolling down AND up
             entry.target.classList.toggle("visible", entry.isIntersecting);
         });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.1 });
 
     elements.sections.forEach(s => observer.observe(s));
     elements.footer && observer.observe(elements.footer);
+}
+
+// ===== HANDLE SCROLL =====
+function handleScroll() {
+    const scrollY = window.scrollY;
+
+    // Header scrolled state
+    if (elements.header) {
+        elements.header.classList.toggle("scrolled", scrollY > 50);
+    }
+
+    // Back to top button visibility
+    if (elements.backTop) {
+        elements.backTop.classList.toggle("visible", scrollY > 400);
+    }
+}
+
+// ===== MODAL =====
+function showModal() {
+    if (elements.thankYouModal) {
+        elements.thankYouModal.classList.add("active");
+    }
+}
+
+function hideModal() {
+    if (elements.thankYouModal) {
+        elements.thankYouModal.classList.remove("active");
+    }
+}
+
+// ===== FORM VALIDATION =====
+function setupFormValidation() {
+    const form = elements.contactForm;
+    if (!form) return;
+
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const messageInput = document.getElementById("message");
+    const submitBtn = form.querySelector("button[type='submit']");
+
+    if (!nameInput || !emailInput || !messageInput || !submitBtn) return;
+
+    // Start with disabled visual state
+    submitBtn.disabled = true;
+
+    function validateEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    function checkFormValidity() {
+        const isNameValid = nameInput.value.trim() !== "";
+        const isEmailValid = validateEmail(emailInput.value.trim());
+        const isMessageValid = messageInput.value.trim() !== "";
+
+        if (isNameValid && isEmailValid && isMessageValid) {
+            submitBtn.classList.add("ready");
+            submitBtn.disabled = false;
+        } else {
+            submitBtn.classList.remove("ready");
+            submitBtn.disabled = true;
+        }
+    }
+
+    // Add event listeners
+    nameInput.addEventListener("input", checkFormValidity);
+    emailInput.addEventListener("input", checkFormValidity);
+    messageInput.addEventListener("input", checkFormValidity);
+}
+
+// ===== FORM SUBMISSION =====
+async function handleFormSubmit(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const submitBtn = form.querySelector("button[type='submit']");
+    const originalText = submitBtn.textContent;
+
+    try {
+        submitBtn.textContent = "Sending...";
+        submitBtn.disabled = true;
+        submitBtn.classList.remove("ready");
+
+        const response = await fetch(form.action, {
+            method: form.method,
+            body: new FormData(form),
+            headers: { "Accept": "application/json" }
+        });
+
+        if (response.ok) {
+            form.reset();
+            showModal();
+            // Re-run validation to reset button state
+            const event = new Event('input');
+            form.querySelector('#name').dispatchEvent(event);
+        } else {
+            throw new Error("Form submission failed");
+        }
+    } catch (error) {
+        alert("Something went wrong. Please try again or email me directly.");
+        submitBtn.classList.add("ready");
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
 }
 
 // ===== UTILITIES =====
@@ -116,28 +223,37 @@ document.addEventListener("DOMContentLoaded", () => {
     // Render
     renderProjects();
     setupAnimations();
+    setupFormValidation();
 
-// Mobile menu toggle
-elements.mobileMenuToggle?.addEventListener("click", toggleMobileMenu);
+    // Mobile menu toggle
+    elements.mobileMenuToggle?.addEventListener("click", toggleMobileMenu);
 
-// Nav links - scroll and close menu
-document.querySelectorAll("#mainNav a").forEach(link => {
-    link.addEventListener("click", (e) => {
-        e.preventDefault();
-        const target = document.querySelector(link.getAttribute("href"));
-        target?.scrollIntoView({ behavior: "smooth" });
-        
-        // Close mobile menu if open
-        const nav = document.getElementById("mainNav");
-        if (nav) {
-            nav.classList.remove("active");
-            // Only hide on mobile, keep visible on desktop
-            if (window.innerWidth <= MOBILE_BREAKPOINT) {
-                nav.style.display = "none";
+    // Nav links - scroll and close menu
+    document.querySelectorAll("#mainNav a").forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const target = document.querySelector(link.getAttribute("href"));
+            target?.scrollIntoView({ behavior: "smooth" });
+            
+            // Close mobile menu if open
+            const nav = document.getElementById("mainNav");
+            if (nav) {
+                nav.classList.remove("active");
+                nav.style.display = ""; // Clear inline styles just in case
+                const toggle = document.getElementById("mobileMenuToggle");
+                if (toggle) toggle.setAttribute("aria-expanded", "false");
             }
-        }
+        });
     });
-});
+
+    // Logo link - smooth scroll to top
+    const logoLink = document.querySelector(".logo");
+    if (logoLink) {
+        logoLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
 
     // Form
     elements.contactForm?.addEventListener("submit", handleFormSubmit);
@@ -151,11 +267,17 @@ document.querySelectorAll("#mainNav a").forEach(link => {
     window.addEventListener("scroll", debounce(handleScroll, 50));
     elements.backTop?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-// Resize
-window.addEventListener("resize", debounce(() => {
-    const nav = document.getElementById("mainNav");
-    if (window.innerWidth > MOBILE_BREAKPOINT && nav) {
-        nav.style.display = "flex";
-    }
-}, 150));
+    // Resize cleanup
+    window.addEventListener("resize", debounce(() => {
+        const nav = document.getElementById("mainNav");
+        if (nav && window.innerWidth > MOBILE_BREAKPOINT) {
+            nav.classList.remove("active");
+            nav.style.display = ""; // Clear inline styles
+            const toggle = document.getElementById("mobileMenuToggle");
+            if (toggle) toggle.setAttribute("aria-expanded", "false");
+        }
+    }, 150));
+
+    // Trigger initial scroll check
+    handleScroll();
 });
