@@ -48,7 +48,7 @@ const elements = {
     contactForm: document.getElementById("contactForm"),
     year: document.getElementById("year"),
     header: document.querySelector("header"),
-    navLinks: document.querySelectorAll("nav a"),
+    navLinks: document.querySelectorAll("#mainNav a"),
     sections: document.querySelectorAll("section:not(.hero)"),
     footer: document.querySelector("footer"),
     social: document.querySelector(".social")
@@ -79,86 +79,15 @@ function renderProjects() {
     });
 }
 
-// ===== SMOOTH SCROLL =====
-function scrollToSection(e) {
-    e.preventDefault();
-    const target = document.querySelector(this.getAttribute("href"));
-    target?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 // ===== MOBILE MENU =====
 function toggleMobileMenu() {
-    if (!elements.mainNav || !elements.mobileMenuToggle) return;
+    const nav = document.getElementById("mainNav");
+    const toggle = document.getElementById("mobileMenuToggle");
+    if (!nav || !toggle) return;
     
-    const isActive = elements.mainNav.classList.toggle("active");
-    elements.mainNav.style.display = isActive ? "flex" : "none";
-    elements.mobileMenuToggle.setAttribute("aria-expanded", isActive);
-}
-
-function closeMobileMenu() {
-    if (window.innerWidth <= MOBILE_BREAKPOINT && elements.mainNav?.classList.contains("active")) {
-        elements.mainNav.classList.remove("active");
-        elements.mainNav.style.display = "none";
-    }
-}
-
-function handleDocumentClick(e) {
-    if (!elements.mainNav?.contains(e.target) && !elements.mobileMenuToggle?.contains(e.target)) {
-        closeMobileMenu();
-    }
-}
-
-// ===== SCROLL HANDLERS =====
-function handleScroll() {
-    const scrollY = window.scrollY;
-
-    // Back to top button
-    if (elements.backTop) {
-        const show = scrollY > 400;
-        elements.backTop.classList.toggle("visible", show);
-    }
-
-    // Header scroll state
-    if (elements.header) {
-        elements.header.classList.toggle("scrolled", scrollY > 50);
-    }
-}
-
-// ===== CONTACT FORM =====
-async function handleFormSubmit(e) {
-    e.preventDefault();
-    if (!elements.contactForm) return;
-
-    const btn = elements.contactForm.querySelector('button[type="submit"]');
-    const originalText = btn.textContent;
-    btn.textContent = "Sending...";
-    btn.disabled = true;
-
-    try {
-        const res = await fetch(elements.contactForm.action, {
-            method: "POST",
-            body: new FormData(elements.contactForm),
-            headers: { "Accept": "application/json" }
-        });
-
-        if (res.ok) {
-            elements.contactForm.reset();
-            showModal();
-        } else throw new Error();
-    } catch (err) {
-        alert("Failed to send. Please try again.");
-    } finally {
-        btn.textContent = originalText;
-        btn.disabled = false;
-    }
-}
-
-function showModal() {
-    elements.thankYouModal?.classList.add("active");
-}
-
-function hideModal() {
-    elements.thankYouModal?.classList.remove("active");
+    nav.classList.toggle("active");
+    const isActive = nav.classList.contains("active");
+    toggle.setAttribute("aria-expanded", isActive);
 }
 
 // ===== SCROLL ANIMATIONS =====
@@ -167,11 +96,10 @@ function setupAnimations() {
         entries.forEach(entry => {
             entry.target.classList.toggle("visible", entry.isIntersecting);
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.15 });
 
     elements.sections.forEach(s => observer.observe(s));
     elements.footer && observer.observe(elements.footer);
-    elements.social && observer.observe(elements.social);
 }
 
 // ===== UTILITIES =====
@@ -189,13 +117,27 @@ document.addEventListener("DOMContentLoaded", () => {
     renderProjects();
     setupAnimations();
 
-    // Mobile menu
-    elements.mobileMenuToggle?.addEventListener("click", toggleMobileMenu);
-    elements.navLinks.forEach(link => link.addEventListener("click", (e) => {
-        scrollToSection(e);
-        closeMobileMenu();
-    }));
-    document.addEventListener("click", handleDocumentClick);
+// Mobile menu toggle
+elements.mobileMenuToggle?.addEventListener("click", toggleMobileMenu);
+
+// Nav links - scroll and close menu
+document.querySelectorAll("#mainNav a").forEach(link => {
+    link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute("href"));
+        target?.scrollIntoView({ behavior: "smooth" });
+        
+        // Close mobile menu if open
+        const nav = document.getElementById("mainNav");
+        if (nav) {
+            nav.classList.remove("active");
+            // Only hide on mobile, keep visible on desktop
+            if (window.innerWidth <= MOBILE_BREAKPOINT) {
+                nav.style.display = "none";
+            }
+        }
+    });
+});
 
     // Form
     elements.contactForm?.addEventListener("submit", handleFormSubmit);
@@ -209,10 +151,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener("scroll", debounce(handleScroll, 50));
     elements.backTop?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-    // Resize
-    window.addEventListener("resize", debounce(() => {
-        if (window.innerWidth > MOBILE_BREAKPOINT) {
-            elements.mainNav?.classList.remove("active");
-        }
-    }, 150));
+// Resize
+window.addEventListener("resize", debounce(() => {
+    const nav = document.getElementById("mainNav");
+    if (window.innerWidth > MOBILE_BREAKPOINT && nav) {
+        nav.style.display = "flex";
+    }
+}, 150));
 });
