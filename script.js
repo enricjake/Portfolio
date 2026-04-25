@@ -96,6 +96,7 @@ card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rota
 
 card.addEventListener("mouseleave", () => {
 card.style.transform = "";
+card.style.transitionDelay = "0s";
 });
 }
 
@@ -142,6 +143,23 @@ async function handleFormSubmit(e) {
 e.preventDefault();
 if (!elements.contactForm) return;
 
+const inputs = elements.contactForm.querySelectorAll("input[required], textarea[required]");
+let hasError = false;
+
+inputs.forEach(input => {
+input.classList.remove("error");
+void input.offsetWidth;
+if (!input.value.trim()) {
+input.classList.add("error");
+hasError = true;
+setTimeout(() => input.classList.remove("error"), 500);
+} else {
+input.classList.add("filled");
+}
+});
+
+if (hasError) return;
+
 const btn = elements.contactForm.querySelector('button[type="submit"]');
 const originalText = btn.textContent;
 btn.textContent = "Sending...";
@@ -156,6 +174,7 @@ headers: { "Accept": "application/json" }
 
 if (res.ok) {
 elements.contactForm.reset();
+elements.contactForm.querySelectorAll(".filled").forEach(el => el.classList.remove("filled"));
 showModal();
 } else throw new Error();
 } catch {
@@ -175,32 +194,30 @@ elements.thankYouModal?.classList.remove("active");
 }
 
 function setupAnimations() {
-const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-if (reducedMotion) {
-elements.sections.forEach(s => s.classList.add("visible"));
-elements.footer && elements.footer.classList.add("visible");
-elements.social && elements.social.classList.add("visible");
-return;
-}
 
 const observer = new IntersectionObserver((entries) => {
 entries.forEach(entry => {
 if (entry.isIntersecting) {
 entry.target.classList.add("visible");
+entry.target.classList.remove("fade-out");
+
+if (entry.target.id === "about") {
+const tags = entry.target.querySelectorAll(".project-tags span");
+tags.forEach((tag, i) => {
+tag.style.animation = `tagPop 0.4s ${0.3 + i * 0.08}s var(--ease) both`;
+});
+}
 
 if (entry.target.id === "work") {
 const cards = entry.target.querySelectorAll(".project-card");
 cards.forEach((card, i) => {
-card.style.opacity = "0";
-card.style.transform = "translateY(30px)";
-setTimeout(() => {
-card.style.transition = "opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1), transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)";
-card.style.opacity = "1";
-card.style.transform = "translateY(0)";
-}, i * 100);
+card.style.transitionDelay = `${i * 0.1}s`;
+card.classList.add("revealed");
 });
 }
+} else {
+entry.target.classList.remove("visible");
+entry.target.classList.add("fade-out");
 }
 });
 }, { threshold: 0.1 });
