@@ -434,6 +434,7 @@ display: block;
 overflow: hidden;
 cursor: pointer;
 max-width: 100%;
+color: inherit;
 background: var(--card-bg);
 backdrop-filter: blur(20px);
 -webkit-backdrop-filter: blur(20px);

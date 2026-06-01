@@ -59,7 +59,7 @@ function renderProjects() {
 if (!elements.projectList) return;
 
 elements.projectList.innerHTML = projects.map((project, i) => `
-<div class="project-card${project.featured ? " featured" : ""}" data-link="${project.link}" style="--card-delay: ${i * 0.1}s">
+<a href="${project.link}" target="_blank" rel="noopener" class="project-card${project.featured ? " featured" : ""}" style="--card-delay: ${i * 0.1}s">
 <img src="${project.img}" alt="${project.title}" class="project-image image-loading" loading="lazy" onload="this.classList.remove('image-loading')" onerror="this.src='https://via.placeholder.com/400x200/1a1a1a/888888?text=Preview'">
 <div class="project-content">
 <h3>${project.title}</h3>
@@ -68,13 +68,10 @@ elements.projectList.innerHTML = projects.map((project, i) => `
 ${project.technologies.map(tech => `<span>${tech}</span>`).join("")}
 </div>
 </div>
-</div>
+</a>
 `).join("");
 
 document.querySelectorAll(".project-card").forEach(card => {
-card.addEventListener("click", () => {
-window.open(card.dataset.link, "_blank", "noopener");
-});
 setupCardTilt(card);
 });
 }
