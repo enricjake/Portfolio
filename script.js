@@ -40,7 +40,7 @@ img: "https://blog.afi.io/content/images/size/w2000/2025/04/gg-weather-icon-1--1
 {
 title: "1942 — Arcade Shooter",
 description: "Browser-based tribute to Capcom's classic 1942 with barrel roll, combos & procedural audio.",
-link: "https://dork.github.io/1942/",
+link: "https://enricjake.github.io/1942/",
 technologies: ["HTML5 Canvas", "JavaScript", "Web Audio API"],
 category: "web",
 featured: false,
