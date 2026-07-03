@@ -44,7 +44,7 @@ link: "https://enricjake.github.io/1942/",
 technologies: ["HTML5 Canvas", "JavaScript", "Web Audio API"],
 category: "web",
 featured: false,
-img: "https://upload.wikimedia.org/wikipedia/en/3/31/1942_%28video_game%29.png"
+img: "https://upload.wikimedia.org/wikipedia/en/5/52/1942_arcade_flyer.png"
 }
 ];
 
