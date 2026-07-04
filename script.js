@@ -45,6 +45,15 @@ technologies: ["HTML5 Canvas", "JavaScript", "Web Audio API"],
 category: "web",
 featured: false,
 img: "https://upload.wikimedia.org/wikipedia/en/5/52/1942_arcade_flyer.png"
+},
+{
+title: "CONTRA — Jungle Run & Gun",
+description: "Browser tribute to Konami's classic Contra with 8-directional aiming, 5 weapons, multi-level platforms & 3 stages.",
+link: "https://enricjake.github.io/Contra/",
+technologies: ["HTML5 Canvas", "JavaScript", "CSS"],
+category: "web",
+featured: false,
+img: "https://wallpapercave.com/wp/wp9185809.jpg"
 }
 ];
 
