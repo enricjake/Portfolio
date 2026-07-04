@@ -53,7 +53,7 @@ link: "https://enricjake.github.io/Contra/",
 technologies: ["HTML5 Canvas", "JavaScript", "CSS"],
 category: "web",
 featured: false,
-    img: "https://wallpapercave.com/wp/wp9185809.jpg"
+    img: "https://upload.wikimedia.org/wikipedia/en/6/65/Contra_cover.jpg"
   },
   {
     title: "Track & Field — 100m Dash",
