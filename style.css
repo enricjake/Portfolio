@@ -921,7 +921,6 @@ section { padding: 60px 4vw; }
 #home.hero p { font-size: 1rem; }
 .project-content { padding: 20px; }
 .project-image { height: 150px; }
-#contactBtn { padding: 12px 24px; font-size: 0.9rem; }
 .social { gap: 20px; font-size: 1.2rem; }
 }
 
@@ -933,8 +932,8 @@ section { padding: 60px 4vw; }
 ::selection { background: var(--accent-color); color: #0a0a0f; }
 
 button:focus, a:focus, input:focus, textarea:focus {
-outline: 2px solid var(--accent-color);
-outline-offset: 2px;
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
 .modal-overlay {

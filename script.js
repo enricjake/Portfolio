@@ -1,5 +1,12 @@
 const MOBILE_BREAKPOINT = 600;
 
+const FALLBACK_IMG = "data:image/svg+xml;utf8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200">' +
+  '<rect width="400" height="200" fill="#1a1a1a"/>' +
+  '<text x="50%" y="50%" fill="#888888" font-family="sans-serif" font-size="20" ' +
+  'text-anchor="middle" dominant-baseline="middle">Preview</text></svg>'
+);
+
 const projects = [
 {
 title: "WinSet – Windows Toolkit",
@@ -83,29 +90,59 @@ social: document.querySelector(".social")
 };
 
 function renderProjects() {
-if (!elements.projectList) return;
+  if (!elements.projectList) return;
 
-elements.projectList.innerHTML = projects.map((project, i) => `
-<a href="${project.link}" target="_blank" rel="noopener" class="project-card${project.featured ? " featured" : ""}" style="--card-delay: ${i * 0.1}s">
-<img src="${project.img}" alt="${project.title}" class="project-image image-loading" loading="lazy" onload="this.classList.remove('image-loading')" onerror="this.src='https://via.placeholder.com/400x200/1a1a1a/888888?text=Preview'">
-<div class="project-content">
-<h3>${project.title}</h3>
-<p>${project.description}</p>
-<div class="project-tech">
-${project.technologies.map(tech => `<span>${tech}</span>`).join("")}
-</div>
-</div>
-</a>
-`).join("");
+  const frag = document.createDocumentFragment();
 
-document.querySelectorAll(".project-card").forEach(card => {
-setupCardTilt(card);
-});
+  projects.forEach((project, i) => {
+    const card = document.createElement("a");
+    card.className = "project-card" + (project.featured ? " featured" : "");
+    card.href = project.link;
+    card.target = "_blank";
+    card.rel = "noopener";
+
+    const img = document.createElement("img");
+    img.className = "project-image image-loading";
+    img.loading = "lazy";
+    img.alt = project.title;
+    img.src = project.img;
+    img.onload = () => img.classList.remove("image-loading");
+    img.onerror = () => { img.src = FALLBACK_IMG; img.onerror = null; };
+    card.appendChild(img);
+
+    const content = document.createElement("div");
+    content.className = "project-content";
+
+    const h3 = document.createElement("h3");
+    h3.textContent = project.title;
+    content.appendChild(h3);
+
+    const p = document.createElement("p");
+    p.textContent = project.description;
+    content.appendChild(p);
+
+    const tech = document.createElement("div");
+    tech.className = "project-tech";
+    project.technologies.forEach(t => {
+      const span = document.createElement("span");
+      span.textContent = t;
+      tech.appendChild(span);
+    });
+    content.appendChild(tech);
+    card.appendChild(content);
+
+    frag.appendChild(card);
+  });
+
+  elements.projectList.innerHTML = "";
+  elements.projectList.appendChild(frag);
+
+  elements.projectList.querySelectorAll(".project-card").forEach(card => {
+    setupCardTilt(card);
+  });
 }
 
 function setupCardTilt(card) {
-if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
 card.addEventListener("mousemove", (e) => {
 const rect = card.getBoundingClientRect();
 const x = e.clientX - rect.left;
@@ -219,32 +256,31 @@ elements.thankYouModal?.classList.remove("active");
 
 function setupAnimations() {
 
-const observer = new IntersectionObserver((entries) => {
-entries.forEach(entry => {
-if (entry.isIntersecting) {
-entry.target.classList.add("visible");
-entry.target.classList.remove("fade-out");
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
 
-if (entry.target.id === "about") {
-const tags = entry.target.querySelectorAll(".project-tags span");
-tags.forEach((tag, i) => {
-tag.style.animation = `tagPop 0.4s ${0.3 + i * 0.08}s var(--ease) both`;
-});
-}
+      entry.target.classList.add("visible");
+      entry.target.classList.remove("fade-out");
 
-if (entry.target.id === "work") {
-const cards = entry.target.querySelectorAll(".project-card");
-cards.forEach((card, i) => {
-card.style.transitionDelay = `${i * 0.1}s`;
-card.classList.add("revealed");
-});
-}
-} else {
-entry.target.classList.remove("visible");
-entry.target.classList.add("fade-out");
-}
-});
-}, { threshold: 0.1 });
+      if (entry.target.id === "about") {
+        const tags = entry.target.querySelectorAll(".project-tags span");
+        tags.forEach((tag, i) => {
+          tag.style.animation = `tagPop 0.4s ${0.3 + i * 0.08}s var(--ease) both`;
+        });
+      }
+
+      if (entry.target.id === "work") {
+        const cards = entry.target.querySelectorAll(".project-card");
+        cards.forEach((card, i) => {
+          card.style.transitionDelay = `${i * 0.1}s`;
+          card.classList.add("revealed");
+        });
+      }
+
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.1 });
 
 elements.sections.forEach(s => observer.observe(s));
 elements.footer && observer.observe(elements.footer);
@@ -275,7 +311,13 @@ elements.closeModalBtn?.addEventListener("click", hideModal);
 elements.thankYouModal?.addEventListener("click", e => e.target === elements.thankYouModal && hideModal());
 document.addEventListener("keydown", e => e.key === "Escape" && hideModal());
 
-window.addEventListener("scroll", debounce(handleScroll, 50));
+  let scrollTicking = false;
+  window.addEventListener("scroll", () => {
+    if (!scrollTicking) {
+      scrollTicking = true;
+      requestAnimationFrame(() => { handleScroll(); scrollTicking = false; });
+    }
+  });
 elements.backTop?.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
 window.addEventListener("resize", debounce(() => {
