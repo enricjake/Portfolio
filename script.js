@@ -157,7 +157,6 @@ card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rota
 
 card.addEventListener("mouseleave", () => {
 card.style.transform = "";
-card.style.transitionDelay = "0s";
 });
 }
 
@@ -187,9 +186,10 @@ closeMobileMenu();
 }
 }
 
+let lastScrollY = 0;
+
 function handleScroll() {
 const scrollY = window.scrollY;
-
 if (elements.backTop) {
 const show = scrollY > 400;
 elements.backTop.classList.toggle("visible", show);
@@ -198,6 +198,20 @@ elements.backTop.classList.toggle("visible", show);
 if (elements.header) {
 elements.header.classList.toggle("scrolled", scrollY > 50);
 }
+
+const hero = document.getElementById("home");
+const about = document.getElementById("about");
+if (hero && about) {
+const aboutTop = about.getBoundingClientRect().top;
+const heroInView = hero.getBoundingClientRect().top < window.innerHeight && hero.getBoundingClientRect().bottom > 0;
+
+if (scrollY < lastScrollY && heroInView) {
+hero.classList.remove("hero-hidden");
+} else if (aboutTop < window.innerHeight * 0.85) {
+hero.classList.add("hero-hidden");
+}
+}
+lastScrollY = scrollY;
 }
 
 async function handleFormSubmit(e) {
@@ -214,8 +228,6 @@ if (!input.value.trim()) {
 input.classList.add("error");
 hasError = true;
 setTimeout(() => input.classList.remove("error"), 500);
-} else {
-input.classList.add("filled");
 }
 });
 
@@ -235,7 +247,6 @@ headers: { "Accept": "application/json" }
 
 if (res.ok) {
 elements.contactForm.reset();
-elements.contactForm.querySelectorAll(".filled").forEach(el => el.classList.remove("filled"));
 showModal();
 } else throw new Error();
 } catch {
@@ -261,16 +272,8 @@ function setupAnimations() {
         entry.target.classList.add("visible");
         entry.target.classList.remove("fade-out");
 
-        if (entry.target.id === "about") {
-          const tags = entry.target.querySelectorAll(".project-tags span");
-          tags.forEach((tag, i) => {
-            tag.style.animation = `tagPop 0.4s ${0.3 + i * 0.08}s var(--ease) both`;
-          });
-        }
-
         if (entry.target.id === "work") {
-          const cards = entry.target.querySelectorAll(".project-card");
-          cards.forEach((card, i) => {
+          entry.target.querySelectorAll(".project-card").forEach((card, i) => {
             card.style.transitionDelay = `${i * 0.1}s`;
             card.classList.add("revealed");
           });
@@ -279,16 +282,8 @@ function setupAnimations() {
         entry.target.classList.remove("visible");
         entry.target.classList.add("fade-out");
 
-        if (entry.target.id === "about") {
-          const tags = entry.target.querySelectorAll(".project-tags span");
-          tags.forEach(tag => {
-            tag.style.animation = "none";
-          });
-        }
-
         if (entry.target.id === "work") {
-          const cards = entry.target.querySelectorAll(".project-card");
-          cards.forEach(card => {
+          entry.target.querySelectorAll(".project-card").forEach(card => {
             card.classList.remove("revealed");
             card.style.transitionDelay = "0s";
           });
