@@ -255,36 +255,51 @@ elements.thankYouModal?.classList.remove("active");
 }
 
 function setupAnimations() {
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
+      if (entry.isIntersecting) {
+        entry.target.classList.add("visible");
+        entry.target.classList.remove("fade-out");
 
-      entry.target.classList.add("visible");
-      entry.target.classList.remove("fade-out");
+        if (entry.target.id === "about") {
+          const tags = entry.target.querySelectorAll(".project-tags span");
+          tags.forEach((tag, i) => {
+            tag.style.animation = `tagPop 0.4s ${0.3 + i * 0.08}s var(--ease) both`;
+          });
+        }
 
-      if (entry.target.id === "about") {
-        const tags = entry.target.querySelectorAll(".project-tags span");
-        tags.forEach((tag, i) => {
-          tag.style.animation = `tagPop 0.4s ${0.3 + i * 0.08}s var(--ease) both`;
-        });
+        if (entry.target.id === "work") {
+          const cards = entry.target.querySelectorAll(".project-card");
+          cards.forEach((card, i) => {
+            card.style.transitionDelay = `${i * 0.1}s`;
+            card.classList.add("revealed");
+          });
+        }
+      } else {
+        entry.target.classList.remove("visible");
+        entry.target.classList.add("fade-out");
+
+        if (entry.target.id === "about") {
+          const tags = entry.target.querySelectorAll(".project-tags span");
+          tags.forEach(tag => {
+            tag.style.animation = "none";
+          });
+        }
+
+        if (entry.target.id === "work") {
+          const cards = entry.target.querySelectorAll(".project-card");
+          cards.forEach(card => {
+            card.classList.remove("revealed");
+            card.style.transitionDelay = "0s";
+          });
+        }
       }
-
-      if (entry.target.id === "work") {
-        const cards = entry.target.querySelectorAll(".project-card");
-        cards.forEach((card, i) => {
-          card.style.transitionDelay = `${i * 0.1}s`;
-          card.classList.add("revealed");
-        });
-      }
-
-      observer.unobserve(entry.target);
     });
   }, { threshold: 0.1 });
 
-elements.sections.forEach(s => observer.observe(s));
-elements.footer && observer.observe(elements.footer);
-elements.social && observer.observe(elements.social);
+  elements.sections.forEach(s => observer.observe(s));
+  elements.footer && observer.observe(elements.footer);
+  elements.social && observer.observe(elements.social);
 }
 
 const debounce = (fn, ms) => {
