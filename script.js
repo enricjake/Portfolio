@@ -143,16 +143,27 @@ function renderProjects() {
 }
 
 function setupCardTilt(card) {
+let ticking = false;
+let lastX = 0;
+let lastY = 0;
+
 card.addEventListener("mousemove", (e) => {
+lastX = e.clientX;
+lastY = e.clientY;
+if (!ticking) {
+ticking = true;
+requestAnimationFrame(() => {
 const rect = card.getBoundingClientRect();
-const x = e.clientX - rect.left;
-const y = e.clientY - rect.top;
+const x = lastX - rect.left;
+const y = lastY - rect.top;
 const centerX = rect.width / 2;
 const centerY = rect.height / 2;
-const rotateX = ((y - centerY) / centerY) * -4;
-const rotateY = ((x - centerX) / centerX) * 4;
-
-card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+const rotateX = ((y - centerY) / centerY) * -8;
+const rotateY = ((x - centerX) / centerX) * 8;
+card.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px) scale(1.02)`;
+ticking = false;
+});
+}
 });
 
 card.addEventListener("mouseleave", () => {
@@ -274,7 +285,7 @@ function setupAnimations() {
 
         if (entry.target.id === "work") {
           entry.target.querySelectorAll(".project-card").forEach((card, i) => {
-            card.style.transitionDelay = `${i * 0.1}s`;
+            card.style.transitionDelay = `${i * 0.08}s`;
             card.classList.add("revealed");
           });
         }
@@ -290,11 +301,34 @@ function setupAnimations() {
         }
       }
     });
-  }, { threshold: 0.1 });
+  }, { threshold: 0.05, rootMargin: "-40px 0px" });
 
   elements.sections.forEach(s => observer.observe(s));
   elements.footer && observer.observe(elements.footer);
   elements.social && observer.observe(elements.social);
+
+  requestAnimationFrame(() => {
+    elements.sections.forEach(s => {
+      const rect = s.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 80) {
+        s.classList.add("visible");
+        if (s.id === "work") {
+          s.querySelectorAll(".project-card").forEach((card, i) => {
+            card.style.transitionDelay = `${i * 0.08}s`;
+            card.classList.add("revealed");
+          });
+        }
+      }
+    });
+    if (elements.footer) {
+      const rect = elements.footer.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 80) elements.footer.classList.add("visible");
+    }
+    if (elements.social) {
+      const rect = elements.social.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 80) elements.social.classList.add("visible");
+    }
+  });
 }
 
 const debounce = (fn, ms) => {
