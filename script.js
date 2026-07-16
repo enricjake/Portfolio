@@ -1,4 +1,4 @@
-const MOBILE_BREAKPOINT = 600;
+const MOBILE_BREAKPOINT = 768;
 
 const FALLBACK_IMG = "data:image/svg+xml;utf8," + encodeURIComponent(
   '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="200">' +
@@ -261,7 +261,12 @@ elements.contactForm.reset();
 showModal();
 } else throw new Error();
 } catch {
-alert("Failed to send. Please try again.");
+const errorEl = document.createElement("p");
+errorEl.className = "form-error";
+errorEl.textContent = "Failed to send. Please try again.";
+errorEl.style.cssText = "color:#ff4444;font-size:0.85rem;margin-top:-8px;text-align:center;";
+elements.contactForm.prepend(errorEl);
+setTimeout(() => errorEl.remove(), 5000);
 } finally {
 btn.textContent = originalText;
 btn.disabled = false;
@@ -289,6 +294,8 @@ function setupAnimations() {
             card.classList.add("revealed");
           });
         }
+
+        observer.unobserve(entry.target);
       } else {
         entry.target.classList.remove("visible");
         entry.target.classList.add("fade-out");
@@ -337,6 +344,7 @@ return (...a) => (clearTimeout(id), id = setTimeout(fn, ms, ...a));
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+document.documentElement.classList.add("js");
 if (elements.year) elements.year.textContent = new Date().getFullYear();
 
 renderProjects();
