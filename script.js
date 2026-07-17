@@ -197,7 +197,7 @@ closeMobileMenu();
 }
 }
 
-let lastScrollY = 0;
+let heroHidden = false;
 
 function handleScroll() {
 const scrollY = window.scrollY;
@@ -211,18 +211,13 @@ elements.header.classList.toggle("scrolled", scrollY > 50);
 }
 
 const hero = document.getElementById("home");
-const about = document.getElementById("about");
-if (hero && about) {
-const aboutTop = about.getBoundingClientRect().top;
-const heroInView = hero.getBoundingClientRect().top < window.innerHeight && hero.getBoundingClientRect().bottom > 0;
-
-if (scrollY < lastScrollY && heroInView) {
-hero.classList.remove("hero-hidden");
-} else if (aboutTop < window.innerHeight * 0.85) {
-hero.classList.add("hero-hidden");
+if (hero) {
+const hide = scrollY > 120;
+if (hide !== heroHidden) {
+heroHidden = hide;
+hero.classList.toggle("hero-hidden", hide);
 }
 }
-lastScrollY = scrollY;
 }
 
 async function handleFormSubmit(e) {
@@ -282,26 +277,34 @@ elements.thankYouModal?.classList.remove("active");
 }
 
 function setupAnimations() {
+  const visibleSet = new Set();
+
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("visible");
-        entry.target.classList.remove("fade-out");
+      const el = entry.target;
+      const wasVisible = visibleSet.has(el);
+      const isNowVisible = entry.isIntersecting;
 
-        if (entry.target.id === "work") {
-          entry.target.querySelectorAll(".project-card").forEach((card, i) => {
+      if (isNowVisible === wasVisible) return;
+
+      if (isNowVisible) {
+        visibleSet.add(el);
+        el.classList.add("visible");
+        el.classList.remove("fade-out");
+
+        if (el.id === "work") {
+          el.querySelectorAll(".project-card").forEach((card, i) => {
             card.style.transitionDelay = `${i * 0.08}s`;
             card.classList.add("revealed");
           });
         }
-
-        observer.unobserve(entry.target);
       } else {
-        entry.target.classList.remove("visible");
-        entry.target.classList.add("fade-out");
+        visibleSet.delete(el);
+        el.classList.remove("visible");
+        el.classList.add("fade-out");
 
-        if (entry.target.id === "work") {
-          entry.target.querySelectorAll(".project-card").forEach(card => {
+        if (el.id === "work") {
+          el.querySelectorAll(".project-card").forEach(card => {
             card.classList.remove("revealed");
             card.style.transitionDelay = "0s";
           });

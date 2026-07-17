@@ -257,9 +257,9 @@ section:not(.hero) {
   padding: 120px 6vw;
   opacity: 0;
   transform: translateY(40px);
-  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
   min-height: 100vh;
-  will-change: opacity, transform;
+  contain: layout style;
 }
 
 html:not(.js) section:not(.hero) {
@@ -444,17 +444,13 @@ cursor: pointer;
 max-width: 100%;
 color: inherit;
 background: var(--card-bg);
-backdrop-filter: blur(20px);
--webkit-backdrop-filter: blur(20px);
 border: 1px solid var(--card-border);
 border-radius: var(--radius-md);
 box-shadow: var(--shadow);
-transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.3s var(--ease);
 transform-style: preserve-3d;
-will-change: transform;
 opacity: 0;
 transform: perspective(800px) rotateX(8deg) rotateY(-6deg) translateY(50px);
-transition: opacity 0.7s var(--ease), transform 0.7s var(--ease), box-shadow 0.4s var(--ease), border-color 0.3s var(--ease);
+transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.3s var(--ease);
 }
 
 .project-card.revealed {
@@ -558,7 +554,7 @@ margin: 0 auto;
   text-align: center;
   opacity: 0;
   transform: translateX(-40px);
-  transition: opacity 0.7s 0.1s var(--ease), transform 0.7s 0.1s var(--ease);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
 }
 
 section.visible .about-content {
@@ -577,7 +573,7 @@ font-weight: 300;
   flex: 0 0 320px;
   opacity: 0;
   transform: translateX(60px) scale(0.85);
-  transition: opacity 0.8s 0.2s var(--ease), transform 0.8s 0.2s var(--ease);
+  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
 }
 
 section.visible .about-image {
@@ -624,7 +620,7 @@ transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
   font-weight: 600;
   opacity: 0;
   transform: translateY(10px) scale(0.9);
-  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), background 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
 }
 
 section.visible .project-tags span {
@@ -745,7 +741,7 @@ footer {
   color: var(--text-muted);
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
 }
 
 footer.visible {
@@ -766,7 +762,7 @@ margin: 16px 0;
 .social a {
 opacity: 0;
 transform: translateY(20px);
-transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
+transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
 }
 
 .social.visible a {
