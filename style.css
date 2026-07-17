@@ -458,6 +458,10 @@ opacity: 1;
 transform: perspective(800px) rotateX(0deg) rotateY(0deg) translateY(0);
 }
 
+.project-card.tilt-reset {
+transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), box-shadow 0.4s var(--ease), border-color 0.3s var(--ease);
+}
+
 .project-card:hover {
   box-shadow: var(--shadow-hover);
   border-color: var(--accent-color);
@@ -988,5 +992,3 @@ animation: loading 1.5s infinite;
 0% { background-position: 200% 0; }
 100% { background-position: -200% 0; }
 }
-
-

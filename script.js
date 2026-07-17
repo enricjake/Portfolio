@@ -92,9 +92,9 @@ social: document.querySelector(".social")
 function renderProjects() {
   if (!elements.projectList) return;
 
-  const frag = document.createDocumentFragment();
+  elements.projectList.innerHTML = "";
 
-  projects.forEach((project, i) => {
+  projects.forEach((project) => {
     const card = document.createElement("a");
     card.className = "project-card" + (project.featured ? " featured" : "");
     card.href = project.link;
@@ -131,13 +131,7 @@ function renderProjects() {
     content.appendChild(tech);
     card.appendChild(content);
 
-    frag.appendChild(card);
-  });
-
-  elements.projectList.innerHTML = "";
-  elements.projectList.appendChild(frag);
-
-  elements.projectList.querySelectorAll(".project-card").forEach(card => {
+    elements.projectList.appendChild(card);
     setupCardTilt(card);
   });
 }
@@ -152,6 +146,7 @@ lastX = e.clientX;
 lastY = e.clientY;
 if (!ticking) {
 ticking = true;
+card.classList.remove("tilt-reset");
 requestAnimationFrame(() => {
 const rect = card.getBoundingClientRect();
 const x = lastX - rect.left;
@@ -167,6 +162,7 @@ ticking = false;
 });
 
 card.addEventListener("mouseleave", () => {
+card.classList.add("tilt-reset");
 card.style.transform = "";
 });
 }
@@ -228,13 +224,13 @@ const inputs = elements.contactForm.querySelectorAll("input[required], textarea[
 let hasError = false;
 
 inputs.forEach(input => {
-input.classList.remove("error");
-void input.offsetWidth;
-if (!input.value.trim()) {
-input.classList.add("error");
-hasError = true;
-setTimeout(() => input.classList.remove("error"), 500);
-}
+  input.classList.remove("error");
+  void input.offsetWidth;
+  if (!input.value.trim()) {
+    input.classList.add("error");
+    hasError = true;
+    input.addEventListener("animationend", () => input.classList.remove("error"), { once: true });
+  }
 });
 
 if (hasError) return;
@@ -255,7 +251,8 @@ if (res.ok) {
 elements.contactForm.reset();
 showModal();
 } else throw new Error();
-} catch {
+} catch (err) {
+  console.error("Form submission failed:", err);
 const errorEl = document.createElement("p");
 errorEl.className = "form-error";
 errorEl.textContent = "Failed to send. Please try again.";
