@@ -70,6 +70,15 @@ featured: false,
     category: "web",
     featured: false,
     img: "https://upload.wikimedia.org/wikipedia/en/thumb/1/1e/Track%26Field_arcadeflyer.png/250px-Track%26Field_arcadeflyer.png"
+  },
+  {
+    title: "Neon Dasher",
+    description: "Fast-paced neon arcade dodger — evade red obstacles and chase high scores.",
+    link: "https://enricjake.github.io/Neon-Dasher/",
+    technologies: ["HTML5 Canvas", "JavaScript", "CSS"],
+    category: "web",
+    featured: false,
+    img: "https://enricjake.github.io/Neon-Dasher/screenshot.png"
   }
 ];
 
